@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hochzeitsplanung 2026</title>
+<style>
+  html { -webkit-text-size-adjust: 100%; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e4de;
+    --border-soft: #f0ede8;
+    --text-primary: #1a1916;
+    --text-secondary: #6b6760;
+    --text-muted: #a09c96;
+    --accent: #c4856a;
+    --accent-light: #f5ede8;
+    --accent-dark: #a06850;
+    --blue: #4a7fa5;
+    --blue-light: #eaf1f7;
+    --blue-dark: #2d5f82;
+    --green: #5a8a6a;
+    --green-light: #eaf3ec;
+    --amber: #b8832a;
+    --amber-light: #faf3e0;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .header-title { font-size: 26px; font-weight: normal; letter-spacing: -0.3px; color: var(--text-primary); }
+  .header-title span { color: var(--accent); }
+  .header-sub { font-size: 13px; color: var(--text-muted); font-family: 'Arial', sans-serif; }
+
+  /* TABS */
+  nav.tabs {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab-btn:hover { color: var(--text-primary); }
+  .tab-btn.active { color: var(--accent-dark); border-bottom-color: var(--accent); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* CARDS & LAYOUT */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .map-footer {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .map-footer .map-link { margin-top: 0; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: start; }
+  .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .section-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  h3 { font-size: 16px; font-weight: normal; margin-bottom: 0.5rem; }
+  h4 { font-size: 13px; font-weight: 600; font-family: Arial, sans-serif; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* BADGES */
+  .badge {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 9px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .badge-paid   { background: var(--green-light); color: var(--green); }
+  .badge-partial{ background: var(--amber-light); color: var(--amber); }
+  .badge-open   { background: var(--border-soft); color: var(--text-muted); }
+  .badge-event  { background: var(--accent-light); color: var(--accent-dark); }
+  .badge-info   { background: var(--blue-light); color: var(--blue-dark); }
+  .missing      { font-style: italic; color: var(--text-muted); font-size: 12px; }
+
+  /* EVENT CARD */
+  .event-date-pill {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    width: fit-content;
+    margin-bottom: 10px;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+  }
+  .pill-amber { background: var(--accent-light); color: var(--accent-dark); }
+  .pill-blue  { background: var(--accent-light); color: var(--accent-dark); }
+  .pill-rose  { background: var(--accent-light); color: var(--accent-dark); }
+
+  .timeline { margin-top: 10px; }
+  .trow {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+  }
+  .trow:last-child { border-bottom: none; }
+  .ttime { color: var(--text-muted); min-width: 52px; font-size: 12px; padding-top: 1px; }
+
+  .map-link {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--blue);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+  .map-link:hover { text-decoration: underline; }
+  .map-icon { font-size: 13px; }
+
+  /* VENDOR CARDS */
+  .vendor-role {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .vendor-name { font-size: 15px; margin-bottom: 4px; }
+  .vendor-detail {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .vendor-note {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* BUDGET TABLE */
+  .budget-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 13px; }
+  .budget-table th {
+    text-align: left;
+    padding: 8px 14px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .budget-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-soft); color: var(--text-primary); vertical-align: middle; }
+  .budget-table tr:last-child td { border-bottom: none; }
+  .budget-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .total-row td { font-weight: 600; background: var(--bg); border-top: 1px solid var(--border); }
+  .paid-amt { color: var(--green); font-size: 12px; font-weight: 600; }
+  .sum-bar { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .sum-item { text-align: center; }
+  .sum-val { font-size: 22px; color: var(--text-primary); }
+  .sum-lbl { font-family: Arial, sans-serif; font-size: 11px; color: var(--text-muted); }
+
+  /* GUEST */
+  .guest-section { margin-bottom: 1.5rem; }
+  .guest-tag {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--border-soft);
+    color: var(--text-secondary);
+    margin: 3px;
+  }
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1rem; text-align: center; box-shadow: var(--shadow); }
+  .stat-val { font-size: 24px; color: var(--text-primary); }
+  .stat-lbl { font-family: Arial, sans-serif; font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .table-grid { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 13px; }
+  .table-grid th { text-align: left; padding: 7px 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg); }
+  .table-grid td { padding: 8px 12px; border-bottom: 1px solid var(--border-soft); }
+  .table-grid tr:last-child td { border-bottom: none; }
+
+  /* TODO */
+  .todo-list { list-style: none; }
+  .todo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-cb {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .todo-cb:checked {
+    background: var(--green);
+    border-color: var(--green);
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .todo-text { flex: 1; line-height: 1.5; }
+  .todo-text.done { text-decoration: line-through; color: var(--text-muted); }
+
+  /* MUSIC */
+  .song-row { display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--border-soft); font-family: Arial, sans-serif; font-size: 13px; }
+  .song-row:last-child { border-bottom: none; }
+  .song-lbl { color: var(--text-muted); min-width: 200px; }
+  .song-val { color: var(--text-primary); font-weight: 500; }
+
+  /* STANDESAMT */
+  .info-row { display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); font-family: Arial, sans-serif; font-size: 13px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-lbl { color: var(--text-muted); min-width: 160px; }
+
+  /* FRAGEN */
+  .frage-item { padding: 10px 0; border-bottom: 1px solid var(--border-soft); font-family: Arial, sans-serif; font-size: 13px; }
+  .frage-item:last-child { border-bottom: none; }
+  .frage-q { font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
+  .frage-hint { color: var(--text-muted); font-size: 12px; }
+
+  /* COLLAPSIBLE EVENT CARDS */
+  .event-card-collapsible { padding: 0; overflow: hidden; }
+  .event-header {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    text-align: left;
+  }
+  .event-header:hover { background: var(--border-soft); }
+  .event-header-left { display: flex; flex-direction: column; gap: 6px; }
+  .event-header h3 { margin-bottom: 0; color: var(--text-primary); }
+  .event-header * { color: var(--text-primary); }
+  .chevron {
+    font-size: 20px;
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .event-header.open .chevron { transform: rotate(180deg); }
+  .event-body {
+    display: none;
+    padding: 0 1.5rem 1.25rem;
+    flex-direction: column;
+  }
+  .event-body.open { display: flex; }
+
+  /* FOTOGRUPPEN */
+  .foto-list { display: flex; flex-direction: column; }
+  .foto-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 1.25rem;
+    border-bottom: 1px solid var(--border-soft);
+    touch-action: manipulation;
+  }
+  .foto-row:last-child { border-bottom: none; }
+  .foto-num {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .foto-body { display: flex; flex-direction: column; gap: 2px; }
+  .foto-name { font-family: Arial, sans-serif; font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .foto-people { font-family: Arial, sans-serif; font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* PHONE LINKS */
+  .tel-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .tel-link:hover { color: var(--blue); text-decoration: underline; }
+
+  /* GUEST ROW */
+  .gast-row {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .gast-row:last-child { border-bottom: none; }
+
+  /* MOBILE FIRST – base styles are for mobile, expand for larger screens */
+  header { padding: 1rem 1rem 0; }
+  main { padding: 1rem; }
+  .card { padding: 1rem 1.25rem; }
+  .event-header { padding: 1rem 1.25rem; }
+  .event-body { padding: 0 1.25rem 1rem; }
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: start; }
+  .grid-auto { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
+  .stat-val { font-size: 20px; }
+  .song-lbl { min-width: 130px; }
+  .info-lbl { min-width: 130px; }
+  .sum-bar { gap: 1rem; }
+  .sum-val { font-size: 22px !important; }
+  .tab-btn { min-height: 44px; touch-action: manipulation; }
+  .todo-cb { touch-action: manipulation; }
+
+  @media(min-width: 600px) {
+    header { padding: 1.5rem 1.5rem 0; }
+    main { padding: 1.5rem; }
+    .grid-auto { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .stat-row { grid-template-columns: repeat(4, 1fr); }
+    .budget-table th:nth-child(3), .budget-table td:nth-child(3) { display: table-cell; }
+  }
+
+  @media(min-width: 800px) {
+    header { padding: 2rem 2.5rem 0; }
+    main { padding: 2rem 2.5rem; }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .song-lbl { min-width: 200px; }
+    .sum-bar { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1 class="header-title">Hochzeitsplanung <span>2026</span></h1>
+
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="showTab('veranstaltungen', this)">Veranstaltungen</button>
+    <button class="tab-btn" onclick="showTab('dienstleister', this)">Dienstleister</button>
+    <button class="tab-btn" onclick="showTab('gaeste', this)">Gäste & Sitzplan</button>
+    <button class="tab-btn" onclick="showTab('todos', this)">To-Dos</button>
+    <button class="tab-btn" onclick="showTab('musik', this)">Musik</button>
+    <button class="tab-btn" onclick="showTab('location', this)">Location & Essen</button>
+    <button class="tab-btn" onclick="showTab('fotos', this)">Fotos</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ── VERANSTALTUNGEN ── -->
+  <div id="veranstaltungen" class="tab-panel active">
+    <p class="section-title">Alle Veranstaltungen</p>
+    <div class="grid-3">
+
+      <div class="card event-card-collapsible">
+        <button class="event-header" onclick="toggleEvent(this)">
+          <div class="event-header-left">
+            <span class="event-date-pill pill-amber">07.08.2026</span>
+            <h3>Polterabend</h3>
+          </div>
+          <span class="chevron">&#8964;</span>
+        </button>
+        <div class="event-body">
+          <div class="timeline">
+            <div class="trow"><span class="ttime">19:00</span><span>Beginn</span></div>
+            <div class="trow"><span class="ttime">03:00</span><span>Ende</span></div>
+          </div>
+          <div style="margin-top:10px;">
+            <span class="badge badge-event">Ohne Einladungen – offene Gästeliste</span>
+          </div>
+          <div class="map-footer">
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Wedemarsch+14,+21423+Winsen+(Luhe)" target="_blank">
+              <span class="map-icon">📍</span>Wedemarsch 14, 21423 Winsen (Luhe)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card event-card-collapsible">
+        <button class="event-header" onclick="toggleEvent(this)">
+          <div class="event-header-left">
+            <span class="event-date-pill pill-blue">13.08.2026</span>
+            <h3>Standesamtliche Trauung</h3>
+          </div>
+          <span class="chevron">&#8964;</span>
+        </button>
+        <div class="event-body">
+          <div class="timeline">
+            <div class="trow"><span class="ttime">16:15</span><span>Standesamtliche Trauung</span></div>
+            <div class="trow"><span class="ttime">Danach</span><span>Grillessen bei Henriks Eltern</span></div>
+          </div>
+          <div class="map-footer">
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Schloßplatz+11,+21423+Winsen+Luhe" target="_blank">
+              <span class="map-icon">📍</span>Schloßpl. 11, 21423 Winsen (Luhe)
+            </a>
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Hoher+Weg+5,+21435+Stelle" target="_blank">
+              <span class="map-icon">📍</span>Grillessen: Hoher Weg 5, 21435 Stelle
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card event-card-collapsible">
+        <button class="event-header" onclick="toggleEvent(this)">
+          <div class="event-header-left">
+            <span class="event-date-pill pill-rose">15.08.2026</span>
+            <h3>Freie Trauung & Feier</h3>
+          </div>
+          <span class="chevron">&#8964;</span>
+        </button>
+        <div class="event-body">
+          <div class="timeline">
+            <div class="trow"><span class="ttime">14:30</span><span>Eintreffen der Gäste</span></div>
+            <div class="trow"><span class="ttime">15:00</span><span>Freie Trauung am Reihersee</span></div>
+            <div class="trow"><span class="ttime">16:30</span><span>Empfang in der Glashütte</span></div>
+            <div class="trow"><span class="ttime">18:00</span><span>Festliches Abendessen</span></div>
+            <div class="trow"><span class="ttime">20:00</span><span>Party</span></div>
+            <div class="trow"><span class="ttime">04:00</span><span>Ende</span></div>
+          </div>
+          <div class="map-footer">
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Auf+den+Bergen+133,+21382+Brietlingen" target="_blank">
+              <span class="map-icon">📍</span>Reihersee: Auf den Bergen 133, 21382 Brietlingen
+            </a>
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Erbstorfer+Landstraße+3,+21365+Adendorf" target="_blank">
+              <span class="map-icon">📍</span>Glashütte, Erbstorfer Landstraße 3, 21365 Adendorf
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── DIENSTLEISTER ── -->
+  <div id="dienstleister" class="tab-panel">
+    <p class="section-title">Kontakte & Dienstleister</p>
+    <div class="grid-auto">
+
+      <div class="card">
+        <div class="vendor-role">DJ – Hochzeit</div>
+        <div class="vendor-name">Marcel Rudolf</div>
+        <div class="vendor-detail">📞 <a class="tel-link" href="tel:+4916096811491">+49 160 96811491</a></div>
+        <div class="vendor-note">Aufbau: 16:00 Uhr · Start: 18:00 Uhr<br>inkl. Fotobox</div>
+      </div>
+
+      <div class="card">
+        <div class="vendor-role">DJ – Polterabend</div>
+        <div class="vendor-name">Jürgen Brosda</div>
+        <div class="vendor-detail">📞 <a class="tel-link" href="tel:+4916080654440">+49 160 8065444</a></div>
+        <div class="vendor-note">07.08.2026</div>
+      </div>
+
+      <div class="card">
+        <div class="vendor-role">Freie Rednerin</div>
+        <div class="vendor-name">Svenja Bonnichsen</div>
+        <div class="vendor-detail">📞 <a class="tel-link" href="tel:+491791207767">+49 179 1207767</a></div>
+        <div class="vendor-note">Start: 14:30 Uhr</div>
+      </div>
+
+      <div class="card">
+        <div class="vendor-role">Fotograf</div>
+        <div class="vendor-name">Thomas Resch</div>
+        <div class="vendor-detail">📞 <a class="tel-link" href="tel:+494131018518">04131 18518</a></div>
+        <div class="vendor-note">Fotostudio Adendorf<br>Einsatz: 14:30 – 18:00 Uhr</div>
+      </div>
+
+      <div class="card">
+        <div class="vendor-role">Location – Glashütte</div>
+        <div class="vendor-name">Jonathan</div>
+        <div class="vendor-detail">📞 <a class="tel-link" href="tel:+491607606139">+49 160 7606139</a></div>
+        <div class="map-footer">
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Erbstorfer+Landstraße+3,+21365+Adendorf" target="_blank">
+            <span class="map-icon">📍</span>Erbstorfer Landstraße 3, 21365 Adendorf
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="vendor-role">Standesamt Winsen (Luhe)</div>
+        <div class="vendor-name">André Wiese</div>
+        <div class="vendor-detail missing">📞 Telefon folgt</div>
+        <div class="map-footer">
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Schloßplatz+11,+21423+Winsen+Luhe" target="_blank">
+            <span class="map-icon">📍</span>Schloßpl. 11, 21423 Winsen (Luhe)
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FOTOS ── -->
+  <div id="fotos" class="tab-panel">
+    <p class="section-title">Fotogruppen – Freie Trauung 15.08.2026</p>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="foto-list">
+        <div class="foto-row"><span class="foto-num">1</span><span class="foto-body"><span class="foto-name">Family</span><span class="foto-people">Malte, Rebekka, Skadi, Heike, Axel, Norbert, Diana, Luki, Oma Gerda, Oma Uschi</span></span></div>
+        <div class="foto-row"><span class="foto-num">2</span><span class="foto-body"><span class="foto-name">Klemps</span></span></div>
+        <div class="foto-row"><span class="foto-num">3</span><span class="foto-body"><span class="foto-name">Kölms</span></span></div>
+        <div class="foto-row"><span class="foto-num">4</span><span class="foto-body"><span class="foto-name">Winterberg</span><span class="foto-people">Uschi, Jens, Petra, Lea, Jasmin, Nick, Ingrid, Klaus, Mirja, Malte, Hella, Dieter, Juli, Ole</span></span></div>
+        <div class="foto-row"><span class="foto-num">5</span><span class="foto-body"><span class="foto-name">Clausens</span><span class="foto-people">Susi, Thomas, Thorben, Svea, Sören</span></span></div>
+        <div class="foto-row"><span class="foto-num">6</span><span class="foto-body"><span class="foto-name">Kölms +</span><span class="foto-people">Heike, Helmut, Norbert, Diana, Lukas, Martin, Frauke</span></span></div>
+        <div class="foto-row"><span class="foto-num">7</span><span class="foto-body"><span class="foto-name">Martin, Norbert &amp; Lauri</span></span></div>
+        <div class="foto-row"><span class="foto-num">8</span><span class="foto-body"><span class="foto-name">Trauzeugen alle</span></span></div>
+        <div class="foto-row"><span class="foto-num">9</span><span class="foto-body"><span class="foto-name">Trauzeugen alle +1</span></span></div>
+        <div class="foto-row"><span class="foto-num">10</span><span class="foto-body"><span class="foto-name">Trauzeugen Frauen</span></span></div>
+        <div class="foto-row"><span class="foto-num">11</span><span class="foto-body"><span class="foto-name">Trauzeugen Männer</span></span></div>
+        <div class="foto-row"><span class="foto-num">12</span><span class="foto-body"><span class="foto-name">Jetlag</span><span class="foto-people">inkl. Ben &amp; Lauren</span></span></div>
+        <div class="foto-row"><span class="foto-num">13</span><span class="foto-body"><span class="foto-name">Jetlag Männer</span></span></div>
+        <div class="foto-row"><span class="foto-num">14</span><span class="foto-body"><span class="foto-name">Jetlag Frauen</span></span></div>
+        <div class="foto-row"><span class="foto-num">15</span><span class="foto-body"><span class="foto-name">Ben &amp; Lauren</span></span></div>
+        <div class="foto-row"><span class="foto-num">16</span><span class="foto-body"><span class="foto-name">Franzi &amp; Jakob</span></span></div>
+        <div class="foto-row"><span class="foto-num">17</span><span class="foto-body"><span class="foto-name">Joris &amp; Anna-Lena</span></span></div>
+        <div class="foto-row"><span class="foto-num">18</span><span class="foto-body"><span class="foto-name">Loretta, Hakan, Laura &amp; Joschi</span></span></div>
+        <div class="foto-row"><span class="foto-num">19</span><span class="foto-body"><span class="foto-name">Schorschi &amp; Lukas</span></span></div>
+        <div class="foto-row"><span class="foto-num">20</span><span class="foto-body"><span class="foto-name">Katja &amp; Fabi</span></span></div>
+        <div class="foto-row"><span class="foto-num">21</span><span class="foto-body"><span class="foto-name">Katja, Juli &amp; Aileen</span></span></div>
+        <div class="foto-row"><span class="foto-num">22</span><span class="foto-body"><span class="foto-name">Gruppenbild</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GÄSTE & SITZPLAN ── -->
+  <div id="gaeste" class="tab-panel">
+    <p class="section-title">Gäste & Sitzplan</p>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">59</div><div class="stat-lbl">Gäste gesamt</div></div>
+      <div class="stat-box"><div class="stat-val">32</div><div class="stat-lbl">Familie</div></div>
+      <div class="stat-box"><div class="stat-val">27</div><div class="stat-lbl">Freunde</div></div>
+      <div class="stat-box"><div class="stat-val">30</div><div class="stat-lbl">Einladungskarten</div></div>
+    </div>
+
+    <p class="section-title">Standesamt – Gästeliste (28 Personen)</p>
+    <div class="card event-card-collapsible" style="margin-bottom:1.5rem;">
+      <button class="event-header" onclick="toggleEvent(this)">
+        <div class="event-header-left">
+          <h3 style="margin:0;">Standesamt 13.08.2026</h3>
+        </div>
+        <span class="chevron">&#8964;</span>
+      </button>
+      <div class="event-body">
+        <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+
+          <div class="card event-card-collapsible" style="box-shadow:none;">
+            <button class="event-header" onclick="toggleEvent(this)">
+              <div class="event-header-left">
+                <h3 style="margin:0; font-size:15px;">Familie <span style="font-size:13px; color:var(--text-muted); font-weight:normal;">18 Personen</span></h3>
+              </div>
+              <span class="chevron">&#8964;</span>
+            </button>
+            <div class="event-body">
+              <div style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary);">
+                <div class="gast-row">Diana &amp; Norbert</div>
+                <div class="gast-row">Heike &amp; Axel</div>
+                <div class="gast-row">Lukas</div>
+                <div class="gast-row">Malte, Rebekka &amp; Skadi</div>
+                <div class="gast-row">Oma Uschi &amp; Oma Gerda</div>
+                <div class="gast-row">Thomas &amp; Susi</div>
+                <div class="gast-row">Hella</div>
+                <div class="gast-row">Martin &amp; Frauke</div>
+                <div class="gast-row">Svea, Sören &amp; Thorben</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card event-card-collapsible" style="box-shadow:none;">
+            <button class="event-header" onclick="toggleEvent(this)">
+              <div class="event-header-left">
+                <h3 style="margin:0; font-size:15px;">Freunde <span style="font-size:13px; color:var(--text-muted); font-weight:normal;">13 Personen</span></h3>
+              </div>
+              <span class="chevron">&#8964;</span>
+            </button>
+            <div class="event-body">
+              <div style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary);">
+                <div class="gast-row">Sören &amp; Tini</div>
+                <div class="gast-row">Robin &amp; Melli</div>
+                <div class="gast-row">Aileen &amp; Timo</div>
+                <div class="gast-row">Juli</div>
+                <div class="gast-row">Jakob &amp; Franzi</div>
+                <div class="gast-row">Ben &amp; Lauren</div>
+                <div class="gast-row">Katja &amp; Fabi</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">Gästeliste Hochzeitsfeier</p>
+    <div class="card event-card-collapsible" style="margin-bottom:1.5rem;">
+      <button class="event-header" onclick="toggleEvent(this)">
+        <div class="event-header-left">
+          <h3 style="margin:0;">Hochzeitsfeier 15.08.2026</h3>
+        </div>
+        <span class="chevron">&#8964;</span>
+      </button>
+      <div class="event-body">
+        <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+
+          <div class="card event-card-collapsible" style="box-shadow:none;">
+            <button class="event-header" onclick="toggleEvent(this)">
+              <div class="event-header-left">
+                <h3 style="margin:0; font-size:15px;">Familie <span style="font-size:13px; color:var(--text-muted); font-weight:normal;">32 Personen</span></h3>
+              </div>
+              <span class="chevron">&#8964;</span>
+            </button>
+            <div class="event-body">
+              <div style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary);">
+                <div class="gast-row">Diana &amp; Norbert</div>
+                <div class="gast-row">Lukas</div>
+                <div class="gast-row">Heike &amp; Axel</div>
+                <div class="gast-row">Malte, Rebekka &amp; Skadi <span class="missing">(&lt;1 J.)</span></div>
+                <div class="gast-row">Oma Uschi &amp; Opa Lu</div>
+                <div class="gast-row">Oma Gerda</div>
+                <div class="gast-row">Juli</div>
+                <div class="gast-row">Hella, Dieter &amp; Ole</div>
+                <div class="gast-row">Ingrid, Klaus, Mirja &amp; Malte</div>
+                <div class="gast-row">Petra, Jens, Jasmin, Nick &amp; Lea <span class="missing">(&lt;10 J.)</span></div>
+                <div class="gast-row">Martin &amp; Frauke</div>
+                <div class="gast-row">Svea &amp; Sören</div>
+                <div class="gast-row">Thorben</div>
+                <div class="gast-row">Susanne &amp; Thomas</div>
+                <div class="gast-row">Helmut &amp; Heike</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card event-card-collapsible" style="box-shadow:none;">
+            <button class="event-header" onclick="toggleEvent(this)">
+              <div class="event-header-left">
+                <h3 style="margin:0; font-size:15px;">Freunde <span style="font-size:13px; color:var(--text-muted); font-weight:normal;">27 Personen</span></h3>
+              </div>
+              <span class="chevron">&#8964;</span>
+            </button>
+            <div class="event-body">
+              <div style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary);">
+                <div class="gast-row">Aileen &amp; Timo</div>
+                <div class="gast-row">Robin &amp; Melli</div>
+                <div class="gast-row">Katja &amp; Fabi</div>
+                <div class="gast-row">Laura &amp; Joschi</div>
+                <div class="gast-row">Lars, Nini &amp; Lily <span class="missing">(&lt;1 J.)</span></div>
+                <div class="gast-row">Isi &amp; Clemi</div>
+                <div class="gast-row">Sören &amp; Tini</div>
+                <div class="gast-row">Luisa, Christian &amp; Bela <span class="missing">(3 J.)</span></div>
+                <div class="gast-row">Schorschi</div>
+                <div class="gast-row">Loretta &amp; Hakan</div>
+                <div class="gast-row">Ben &amp; Lauren</div>
+                <div class="gast-row">Jakob &amp; Franzi</div>
+                <div class="gast-row">Anna-Lena &amp; Joris</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">Sitzplan</p>
+    <div class="card event-card-collapsible" style="margin-bottom:1rem;">
+      <button class="event-header" onclick="toggleEvent(this)">
+        <div class="event-header-left">
+          <h3 style="margin:0;">Sitzplan – 6 Tische</h3>
+        </div>
+        <span class="chevron">&#8964;</span>
+      </button>
+      <div class="event-body">
+        <div class="grid-3" style="width:100%;">
+
+          <div class="card">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-family:Arial,sans-serif; font-weight:600; font-size:14px;">Tisch 1</span>
+              <span class="badge badge-info">9 Personen</span>
+            </div>
+            <div class="gast-row">Brautpaar</div>
+            <div class="gast-row">Trauzeugen</div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-family:Arial,sans-serif; font-weight:600; font-size:14px;">Tisch 2</span>
+              <span class="badge badge-info">10 Personen</span>
+            </div>
+            <div class="gast-row">Eltern</div>
+            <div class="gast-row">Omas</div>
+            <div class="gast-row">Susanne &amp; Thomas</div>
+            <div class="gast-row">Helmut &amp; Heike</div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-family:Arial,sans-serif; font-weight:600; font-size:14px;">Tisch 3</span>
+              <span class="badge badge-info">8 Personen</span>
+            </div>
+            <div class="gast-row">Hella &amp; Dieter</div>
+            <div class="gast-row">Martin &amp; Frauke</div>
+            <div class="gast-row">Klaus &amp; Ingrid</div>
+            <div class="gast-row">Petra &amp; Jens</div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-family:Arial,sans-serif; font-weight:600; font-size:14px;">Tisch 4</span>
+              <span class="badge badge-info">10 Personen</span>
+            </div>
+            <div class="gast-row">Svea &amp; Sören</div>
+            <div class="gast-row">Thorben</div>
+            <div class="gast-row">Malte &amp; Rebekka</div>
+            <div class="gast-row">Mirja &amp; Malte</div>
+            <div class="gast-row">Lea, Jasmin &amp; Nick</div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-family:Arial,sans-serif; font-weight:600; font-size:14px;">Tisch 5</span>
+              <span class="badge badge-info">11 Personen</span>
+            </div>
+            <div class="gast-row">Lukas</div>
+            <div class="gast-row">Schorschi &amp; Ole</div>
+            <div class="gast-row">Katja &amp; Fabi</div>
+            <div class="gast-row">Jakob &amp; Franzi</div>
+            <div class="gast-row">Laura &amp; Joschi</div>
+            <div class="gast-row">Loretta &amp; Hakan</div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-family:Arial,sans-serif; font-weight:600; font-size:14px;">Tisch 6</span>
+              <span class="badge badge-info">10 Personen</span>
+            </div>
+            <div class="gast-row">Christian &amp; Luisa</div>
+            <div class="gast-row">Lars &amp; Nini</div>
+            <div class="gast-row">Isi &amp; Clemi</div>
+            <div class="gast-row">Ben &amp; Lauren</div>
+            <div class="gast-row">Anna-Lena &amp; Joris</div>
+          </div>
+
+        </div>
+        <p style="font-family:Arial,sans-serif; font-size:12px; color:var(--text-muted); margin-top:10px;">
+          ℹ️ 3 Kinder unter 3 Jahren · 1 Kind ca. 10 Jahre
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── TO-DOS ── -->
+  <div id="todos" class="tab-panel">
+    <p class="section-title">Offene Aufgaben</p>
+    <div class="grid-2">
+
+      <div class="card">
+        <h4 style="margin-bottom:0.75rem;">Einladungen & Kommunikation</h4>
+        <ul class="todo-list">
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Einladungskarten erstellen &amp; verschicken (Aug./Sept.)</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Save the Date Video verschicken</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Polterabend Info-Karten gestalten &amp; verschicken</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Standesamt Einladungen schreiben</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4 style="margin-bottom:0.75rem;">Persönliche Vorbereitung</h4>
+        <ul class="todo-list">
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Friseurtermin rechtzeitig vereinbaren</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Brautkleidanprobe (Januar)</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Auto &amp; Autoschmuck organisieren</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4 style="margin-bottom:0.75rem;">Dekoration & Papeterie</h4>
+        <ul class="todo-list">
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Tischdekoration organisieren</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Willkommensschild gestalten</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Tischkarten mit Namen erstellen</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Menü- &amp; Getränkekarten gestalten</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Seifenblasen / Rosenblätter besorgen</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4 style="margin-bottom:0.75rem;">Offene Infos nachreichen</h4>
+        <ul class="todo-list">
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Telefonnummer André Wiese (Standesamt) nachreichen</span></li>
+          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Nachname Freie Rednerin Svenja ergänzen</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MUSIK ── -->
+  <div id="musik" class="tab-panel">
+    <p class="section-title">Musikplanung – Freie Trauung & Feier</p>
+    <div class="card">
+      <div class="song-row"><span class="song-lbl">Hochzeitstanz</span><span class="song-val">Mit dir ist es anders – Montez</span></div>
+      <div class="song-row"><span class="song-lbl">Nach Hochzeitstanz</span><span class="song-val">Pur Hitmix</span></div>
+      <div class="song-row"><span class="song-lbl">Eintreffen (Lauri &amp; Norbi)</span><span class="song-val">Ausmacht – Emilio <span style="color:var(--text-muted);font-weight:normal;font-size:12px;">(Start ca. 34 Sek.)</span></span></div>
+      <div class="song-row"><span class="song-lbl">Auslaufen (Lauri &amp; Henny)</span><span class="song-val">Bella Napoli – Roy Bianco <span style="color:var(--text-muted);font-weight:normal;font-size:12px;">(Start ca. 14 Sek.)</span></span></div>
+    </div>
+  </div>
+
+  <!-- ── LOCATION & ESSEN ── -->
+  <div id="location" class="tab-panel">
+    <p class="section-title">Location & Essen</p>
+
+    <div class="grid-2" style="margin-bottom:1.5rem;">
+      <div class="card">
+        <h4>Grillessen nach Standesamt</h4>
+        <p style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Bei Henriks Eltern</p>
+        <div class="info-row"><span class="info-lbl">Vegane Currywurst</span></div>
+        <div class="info-row"><span class="info-lbl">Normale Bratwurst (Grill)</span></div>
+        <div class="info-row"><span class="info-lbl">Brötchen &amp; Snacks</span></div>
+        <div class="info-row"><span class="info-lbl">Getränke</span><span>Wasser, Wein, Softdrinks, Bier</span></div>
+        <div class="info-row"><span class="info-lbl">Salate</span><span>Von Freunden &amp; Familie</span></div>
+        <div class="map-footer">
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Hoher+Weg+5,+21435+Stelle" target="_blank">
+            <span class="map-icon">📍</span>Hoher Weg 5, 21435 Stelle
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4>Buffet – Freie Trauung & Feier</h4>
+        <p style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Glashütte, 15.08.2026</p>
+        <div class="info-row"><span>Lachs</span></div>
+        <div class="info-row"><span>Grillkäse</span></div>
+        <div class="info-row"><span>Obst (zum Nachtisch)</span></div>
+      </div>
+    </div>
+
+    <p class="section-title">Offene Fragen an Location (Glashütte)</p>
+    <div class="card">
+      <div class="frage-item">
+        <div class="frage-q">Ab wann kann dekoriert werden?</div>
+      </div>
+      <div class="frage-item">
+        <div class="frage-q">Wie läuft das Handling der Torte?</div>
+        <div class="frage-hint">Ggf. nur Muffins?</div>
+      </div>
+      <div class="frage-item">
+        <div class="frage-q">BBQ-Optionen mit mehr vegetarischen Alternativen?</div>
+        <div class="frage-hint">Austausch / Anpassung des Menüs</div>
+      </div>
+      <div class="frage-item">
+        <div class="frage-q">Candy Bar selbst organisieren?</div>
+        <div class="frage-hint">Was müsste mitgebracht werden?</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggleEvent(btn) {
+    btn.classList.toggle('open');
+    btn.nextElementSibling.classList.toggle('open');
+  }
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+  function toggleDone(cb) {
+    const span = cb.nextElementSibling;
+    span.classList.toggle('done', cb.checked);
+  }
+</script>
+
+</body>
+</html>
