@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hochzeitsplanung 2026</title>
+<title>Lauri & Henny</title>
 <style>
   html { -webkit-text-size-adjust: 100%; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,50 +40,141 @@
     line-height: 1.6;
   }
 
-  /* HEADER */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    max-width: 1100px;
-    margin: 0 auto;
+  /* HERO — fixed, füllt den ganzen Screen */
+  .hero-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
   }
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
   }
-  .header-top {
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: none;
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 26vh 1rem 1.5rem;
+    pointer-events: none;
   }
-  .header-title { font-size: 26px; font-weight: normal; letter-spacing: -0.3px; color: var(--text-primary); }
-  .header-title span { color: var(--accent); }
-  .header-sub { font-size: 13px; color: var(--text-muted); font-family: 'Arial', sans-serif; }
+  .hero-title {
+    font-size: clamp(28px, 7vw, 46px);
+    font-weight: normal;
+    color: #fff;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    line-height: 1.2;
+  }
+  .hero-amp { color: var(--accent); }
+  .hero-date {
+    font-family: Arial, sans-serif;
+    font-size: clamp(11px, 2.5vw, 14px);
+    color: rgba(255,255,255,0.88);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.45);
+  }
 
-  /* TABS */
+  /* PAGE WRAP — scrollt über das fixed Hero-Bild */
+  .page-wrap {
+    position: relative;
+    z-index: 10;
+    margin-top: 100vh;
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    min-height: 100vh;
+  }
+
+  /* BURGER BUTTON — immer sichtbar, fixed oben rechts */
+  .burger-btn {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+    background: rgba(0,0,0,0.38);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    z-index: 300;
+    touch-action: manipulation;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .burger-btn span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* BACKDROP (Mobile) */
+  .nav-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 150;
+  }
+  .nav-backdrop.open { display: block; }
+
+  /* TABS — Mobile: Slide-in von rechts; Desktop: horizontale Leiste */
   nav.tabs {
     display: flex;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 78vw;
+    max-width: 300px;
+    z-index: 200;
+    background: var(--surface);
+    box-shadow: -6px 0 28px rgba(0,0,0,0.18);
+    padding-top: 4rem;
+    transform: translateX(110%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  nav.tabs.open { transform: translateX(0); }
   nav.tabs::-webkit-scrollbar { display: none; }
   .tab-btn {
     font-family: 'Arial', sans-serif;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
-    color: var(--text-muted);
+    color: var(--text-primary);
     background: none;
     border: none;
-    border-bottom: 2px solid transparent;
-    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border-soft);
+    padding: 1.1rem 1.5rem;
     cursor: pointer;
-    white-space: nowrap;
-    transition: color 0.15s, border-color 0.15s;
+    text-align: left;
+    transition: background 0.15s;
+    touch-action: manipulation;
+    width: 100%;
   }
-  .tab-btn:hover { color: var(--text-primary); }
-  .tab-btn.active { color: var(--accent-dark); border-bottom-color: var(--accent); }
+  .tab-btn:last-child { border-bottom: none; }
+  .tab-btn:hover { background: var(--border-soft); }
+  .tab-btn.active { color: var(--accent-dark); background: var(--accent-light); }
 
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
@@ -208,29 +299,6 @@
     border-top: 1px solid var(--border-soft);
   }
 
-  /* BUDGET TABLE */
-  .budget-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 13px; }
-  .budget-table th {
-    text-align: left;
-    padding: 8px 14px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-  }
-  .budget-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-soft); color: var(--text-primary); vertical-align: middle; }
-  .budget-table tr:last-child td { border-bottom: none; }
-  .budget-table .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .total-row td { font-weight: 600; background: var(--bg); border-top: 1px solid var(--border); }
-  .paid-amt { color: var(--green); font-size: 12px; font-weight: 600; }
-  .sum-bar { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  .sum-item { text-align: center; }
-  .sum-val { font-size: 22px; color: var(--text-primary); }
-  .sum-lbl { font-family: Arial, sans-serif; font-size: 11px; color: var(--text-muted); }
-
   /* GUEST */
   .guest-section { margin-bottom: 1.5rem; }
   .guest-tag {
@@ -253,58 +321,10 @@
   .table-grid td { padding: 8px 12px; border-bottom: 1px solid var(--border-soft); }
   .table-grid tr:last-child td { border-bottom: none; }
 
-  /* TODO */
-  .todo-list { list-style: none; }
-  .todo-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border-soft);
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    color: var(--text-primary);
-  }
-  .todo-item:last-child { border-bottom: none; }
-  .todo-cb {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    flex-shrink: 0;
-    margin-top: 1px;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .todo-cb:checked {
-    background: var(--green);
-    border-color: var(--green);
-    background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .todo-text { flex: 1; line-height: 1.5; }
-  .todo-text.done { text-decoration: line-through; color: var(--text-muted); }
-
-  /* MUSIC */
-  .song-row { display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--border-soft); font-family: Arial, sans-serif; font-size: 13px; }
-  .song-row:last-child { border-bottom: none; }
-  .song-lbl { color: var(--text-muted); min-width: 200px; }
-  .song-val { color: var(--text-primary); font-weight: 500; }
-
   /* STANDESAMT */
   .info-row { display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); font-family: Arial, sans-serif; font-size: 13px; }
   .info-row:last-child { border-bottom: none; }
   .info-lbl { color: var(--text-muted); min-width: 160px; }
-
-  /* FRAGEN */
-  .frage-item { padding: 10px 0; border-bottom: 1px solid var(--border-soft); font-family: Arial, sans-serif; font-size: 13px; }
-  .frage-item:last-child { border-bottom: none; }
-  .frage-q { font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
-  .frage-hint { color: var(--text-muted); font-size: 12px; }
 
   /* COLLAPSIBLE EVENT CARDS */
   .event-card-collapsible { padding: 0; overflow: hidden; }
@@ -387,7 +407,6 @@
   .gast-row:last-child { border-bottom: none; }
 
   /* MOBILE FIRST – base styles are for mobile, expand for larger screens */
-  header { padding: 1rem 1rem 0; }
   main { padding: 1rem; }
   .card { padding: 1rem 1.25rem; }
   .event-header { padding: 1rem 1.25rem; }
@@ -397,50 +416,79 @@
   .grid-auto { display: grid; grid-template-columns: 1fr; gap: 1rem; }
   .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
   .stat-val { font-size: 20px; }
-  .song-lbl { min-width: 130px; }
   .info-lbl { min-width: 130px; }
-  .sum-bar { gap: 1rem; }
-  .sum-val { font-size: 22px !important; }
-  .tab-btn { min-height: 44px; touch-action: manipulation; }
-  .todo-cb { touch-action: manipulation; }
 
   @media(min-width: 600px) {
-    header { padding: 1.5rem 1.5rem 0; }
-    main { padding: 1.5rem; }
+    .burger-btn { display: none; }
+    .nav-backdrop { display: none !important; }
+    .page-wrap { border-radius: 0; }
+    nav.tabs {
+      display: flex !important;
+      flex-direction: row;
+      position: sticky;
+      top: 0;
+      transform: none;
+      transition: none;
+      box-shadow: none;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      width: auto;
+      max-width: none;
+      padding-top: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      z-index: 50;
+    }
+    .tab-btn {
+      font-size: 13px;
+      border-bottom: 2px solid transparent;
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+      color: var(--text-muted);
+      white-space: nowrap;
+      width: auto;
+    }
+    .tab-btn:last-child { border-bottom: 2px solid transparent; }
+    .tab-btn:hover { background: none; color: var(--text-primary); }
+    .tab-btn.active { color: var(--accent-dark); border-bottom-color: var(--accent); background: none; }
+    main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
     .grid-auto { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
     .stat-row { grid-template-columns: repeat(4, 1fr); }
-    .budget-table th:nth-child(3), .budget-table td:nth-child(3) { display: table-cell; }
   }
 
   @media(min-width: 800px) {
-    header { padding: 2rem 2.5rem 0; }
     main { padding: 2rem 2.5rem; }
     .grid-2 { grid-template-columns: 1fr 1fr; }
     .grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .song-lbl { min-width: 200px; }
-    .sum-bar { gap: 2rem; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <h1 class="header-title">Hochzeitsplanung <span>2026</span></h1>
-
+<!-- Hero: fixed, füllt kompletten Screen -->
+<div class="hero-screen">
+  <img src="IMG_7555.jpeg" alt="Henrik &amp; Lauri" class="hero-img">
+  <div class="hero-overlay">
+    <h1 class="hero-title">Lauri <span class="hero-amp">&amp;</span> Henny</h1>
+    <p class="hero-date">August 2026</p>
   </div>
-  <nav class="tabs">
+</div>
+
+<!-- Burger-Button: immer oben rechts sichtbar -->
+<button class="burger-btn" id="burger-btn" onclick="toggleMobileNav()" aria-label="Menü öffnen">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- Scrollbarer Inhalt, der über das Bild gleitet -->
+<div class="page-wrap">
+  <div class="nav-backdrop" id="nav-backdrop" onclick="toggleMobileNav()"></div>
+  <nav class="tabs" id="main-nav">
     <button class="tab-btn active" onclick="showTab('veranstaltungen', this)">Veranstaltungen</button>
     <button class="tab-btn" onclick="showTab('dienstleister', this)">Dienstleister</button>
     <button class="tab-btn" onclick="showTab('gaeste', this)">Gäste & Sitzplan</button>
-    <button class="tab-btn" onclick="showTab('todos', this)">To-Dos</button>
-    <button class="tab-btn" onclick="showTab('musik', this)">Musik</button>
-    <button class="tab-btn" onclick="showTab('location', this)">Location & Essen</button>
     <button class="tab-btn" onclick="showTab('fotos', this)">Fotos</button>
   </nav>
-</header>
-
-<main>
+  <main>
 
   <!-- ── VERANSTALTUNGEN ── -->
   <div id="veranstaltungen" class="tab-panel active">
@@ -481,7 +529,8 @@
         </button>
         <div class="event-body">
           <div class="timeline">
-            <div class="trow"><span class="ttime">16:15</span><span>Standesamtliche Trauung</span></div>
+            <div class="trow"><span class="ttime">17:00</span><span>Ankunft</span></div>
+            <div class="trow"><span class="ttime">17:15</span><span>Standesamtliche Trauung</span></div>
             <div class="trow"><span class="ttime">Danach</span><span>Grillessen bei Henriks Eltern</span></div>
           </div>
           <div class="map-footer">
@@ -505,8 +554,11 @@
         </button>
         <div class="event-body">
           <div class="timeline">
+            <div class="trow"><span class="ttime">10:00</span><span>Lauri Schminken Douglas</span></div>
+            <div class="trow"><span class="ttime">12:00</span><span>Lauri Frisör</span></div>
+            <div class="trow"><span class="ttime">14:15</span><span>Henny Ankunft Reihersee</span></div>
             <div class="trow"><span class="ttime">14:30</span><span>Eintreffen der Gäste</span></div>
-            <div class="trow"><span class="ttime">15:00</span><span>Freie Trauung am Reihersee</span></div>
+            <div class="trow"><span class="ttime">15:00</span><span>Freie Trauung am Reihersee inkl. Fotoshooting</span></div>
             <div class="trow"><span class="ttime">16:30</span><span>Empfang in der Glashütte</span></div>
             <div class="trow"><span class="ttime">18:00</span><span>Festliches Abendessen</span></div>
             <div class="trow"><span class="ttime">20:00</span><span>Party</span></div>
@@ -538,12 +590,6 @@
         <div class="vendor-note">Aufbau: 16:00 Uhr · Start: 18:00 Uhr<br>inkl. Fotobox</div>
       </div>
 
-      <div class="card">
-        <div class="vendor-role">DJ – Polterabend</div>
-        <div class="vendor-name">Jürgen Brosda</div>
-        <div class="vendor-detail">📞 <a class="tel-link" href="tel:+4916080654440">+49 160 8065444</a></div>
-        <div class="vendor-note">07.08.2026</div>
-      </div>
 
       <div class="card">
         <div class="vendor-role">Freie Rednerin</div>
@@ -554,7 +600,7 @@
 
       <div class="card">
         <div class="vendor-role">Fotograf</div>
-        <div class="vendor-name">Thomas Resch</div>
+        <div class="vendor-name">Kevin Könicke</div>
         <div class="vendor-detail">📞 <a class="tel-link" href="tel:+494131018518">04131 18518</a></div>
         <div class="vendor-note">Fotostudio Adendorf<br>Einsatz: 14:30 – 18:00 Uhr</div>
       </div>
@@ -570,16 +616,6 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="vendor-role">Standesamt Winsen (Luhe)</div>
-        <div class="vendor-name">André Wiese</div>
-        <div class="vendor-detail missing">📞 Telefon folgt</div>
-        <div class="map-footer">
-          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Schloßplatz+11,+21423+Winsen+Luhe" target="_blank">
-            <span class="map-icon">📍</span>Schloßpl. 11, 21423 Winsen (Luhe)
-          </a>
-        </div>
-      </div>
 
     </div>
   </div>
@@ -840,115 +876,30 @@
 
   </div>
 
-  <!-- ── TO-DOS ── -->
-  <div id="todos" class="tab-panel">
-    <p class="section-title">Offene Aufgaben</p>
-    <div class="grid-2">
 
-      <div class="card">
-        <h4 style="margin-bottom:0.75rem;">Einladungen & Kommunikation</h4>
-        <ul class="todo-list">
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Einladungskarten erstellen &amp; verschicken (Aug./Sept.)</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Save the Date Video verschicken</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Polterabend Info-Karten gestalten &amp; verschicken</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Standesamt Einladungen schreiben</span></li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h4 style="margin-bottom:0.75rem;">Persönliche Vorbereitung</h4>
-        <ul class="todo-list">
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Friseurtermin rechtzeitig vereinbaren</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Brautkleidanprobe (Januar)</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Auto &amp; Autoschmuck organisieren</span></li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h4 style="margin-bottom:0.75rem;">Dekoration & Papeterie</h4>
-        <ul class="todo-list">
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Tischdekoration organisieren</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Willkommensschild gestalten</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Tischkarten mit Namen erstellen</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Menü- &amp; Getränkekarten gestalten</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Seifenblasen / Rosenblätter besorgen</span></li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h4 style="margin-bottom:0.75rem;">Offene Infos nachreichen</h4>
-        <ul class="todo-list">
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Telefonnummer André Wiese (Standesamt) nachreichen</span></li>
-          <li class="todo-item"><input type="checkbox" class="todo-cb" onchange="toggleDone(this)"><span class="todo-text">Nachname Freie Rednerin Svenja ergänzen</span></li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ── MUSIK ── -->
-  <div id="musik" class="tab-panel">
-    <p class="section-title">Musikplanung – Freie Trauung & Feier</p>
-    <div class="card">
-      <div class="song-row"><span class="song-lbl">Hochzeitstanz</span><span class="song-val">Mit dir ist es anders – Montez</span></div>
-      <div class="song-row"><span class="song-lbl">Nach Hochzeitstanz</span><span class="song-val">Pur Hitmix</span></div>
-      <div class="song-row"><span class="song-lbl">Eintreffen (Lauri &amp; Norbi)</span><span class="song-val">Ausmacht – Emilio <span style="color:var(--text-muted);font-weight:normal;font-size:12px;">(Start ca. 34 Sek.)</span></span></div>
-      <div class="song-row"><span class="song-lbl">Auslaufen (Lauri &amp; Henny)</span><span class="song-val">Bella Napoli – Roy Bianco <span style="color:var(--text-muted);font-weight:normal;font-size:12px;">(Start ca. 14 Sek.)</span></span></div>
-    </div>
-  </div>
-
-  <!-- ── LOCATION & ESSEN ── -->
-  <div id="location" class="tab-panel">
-    <p class="section-title">Location & Essen</p>
-
-    <div class="grid-2" style="margin-bottom:1.5rem;">
-      <div class="card">
-        <h4>Grillessen nach Standesamt</h4>
-        <p style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Bei Henriks Eltern</p>
-        <div class="info-row"><span class="info-lbl">Vegane Currywurst</span></div>
-        <div class="info-row"><span class="info-lbl">Normale Bratwurst (Grill)</span></div>
-        <div class="info-row"><span class="info-lbl">Brötchen &amp; Snacks</span></div>
-        <div class="info-row"><span class="info-lbl">Getränke</span><span>Wasser, Wein, Softdrinks, Bier</span></div>
-        <div class="info-row"><span class="info-lbl">Salate</span><span>Von Freunden &amp; Familie</span></div>
-        <div class="map-footer">
-          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Hoher+Weg+5,+21435+Stelle" target="_blank">
-            <span class="map-icon">📍</span>Hoher Weg 5, 21435 Stelle
-          </a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h4>Buffet – Freie Trauung & Feier</h4>
-        <p style="font-family:Arial,sans-serif; font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Glashütte, 15.08.2026</p>
-        <div class="info-row"><span>Lachs</span></div>
-        <div class="info-row"><span>Grillkäse</span></div>
-        <div class="info-row"><span>Obst (zum Nachtisch)</span></div>
-      </div>
-    </div>
-
-    <p class="section-title">Offene Fragen an Location (Glashütte)</p>
-    <div class="card">
-      <div class="frage-item">
-        <div class="frage-q">Ab wann kann dekoriert werden?</div>
-      </div>
-      <div class="frage-item">
-        <div class="frage-q">Wie läuft das Handling der Torte?</div>
-        <div class="frage-hint">Ggf. nur Muffins?</div>
-      </div>
-      <div class="frage-item">
-        <div class="frage-q">BBQ-Optionen mit mehr vegetarischen Alternativen?</div>
-        <div class="frage-hint">Austausch / Anpassung des Menüs</div>
-      </div>
-      <div class="frage-item">
-        <div class="frage-q">Candy Bar selbst organisieren?</div>
-        <div class="frage-hint">Was müsste mitgebracht werden?</div>
-      </div>
-    </div>
-  </div>
-
-</main>
+  </main>
+</div>
 
 <script>
+  function smoothScrollTo(targetY, duration) {
+    const startY = window.scrollY;
+    const diff = targetY - startY;
+    let start;
+    function step(ts) {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      const ease = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
+      window.scrollTo(0, startY + diff * ease);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function toggleMobileNav() {
+    document.getElementById('main-nav').classList.toggle('open');
+    document.getElementById('burger-btn').classList.toggle('open');
+    document.getElementById('nav-backdrop').classList.toggle('open');
+  }
   function toggleEvent(btn) {
     btn.classList.toggle('open');
     btn.nextElementSibling.classList.toggle('open');
@@ -958,10 +909,10 @@
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     btn.classList.add('active');
-  }
-  function toggleDone(cb) {
-    const span = cb.nextElementSibling;
-    span.classList.toggle('done', cb.checked);
+    document.getElementById('main-nav').classList.remove('open');
+    document.getElementById('burger-btn').classList.remove('open');
+    document.getElementById('nav-backdrop').classList.remove('open');
+    smoothScrollTo(document.querySelector('.page-wrap').offsetTop, 800);
   }
 </script>
 
