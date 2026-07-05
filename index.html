@@ -1167,6 +1167,8 @@
   const configured = firebaseConfig.apiKey !== "DEIN_API_KEY";
 
   let adminMode = false;
+  let lastSnap  = null;
+  let renderList = () => {};
 
   window.toggleAdminBar = function() {
     const box = document.getElementById('admin-pw-box');
@@ -1207,9 +1209,7 @@
     const db  = getFirestore(app);
     const col = collection(db, 'polterabend');
 
-    let lastSnap = null;
-
-    function renderList(snap) {
+    renderList = function renderList(snap) {
       lastSnap = snap;
       const list  = document.getElementById('polter-list');
       const badge = document.getElementById('polter-count-badge');
