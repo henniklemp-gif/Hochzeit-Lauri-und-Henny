@@ -607,6 +607,56 @@
   .unlock-cancel:hover { background: var(--border-soft); }
   .unlock-error { font-family: Arial, sans-serif; font-size: 12px; color: #c0392b; margin-top: 8px; display: none; }
   #unlock-nav-btn { color: var(--text-muted); }
+
+  /* FOTO ABHAKEN */
+  .foto-check-btn {
+    margin-left: auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: transparent;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .foto-check-btn:hover { border-color: var(--green); }
+  .foto-row.foto-done .foto-check-btn {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+  .foto-row.foto-done .foto-name { text-decoration: line-through; color: var(--text-muted); }
+  .foto-row.foto-done .foto-people { color: var(--text-muted); opacity: 0.7; }
+  .foto-progress {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .foto-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .foto-progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
 </style>
 </head>
 <body>
@@ -791,6 +841,10 @@
   <!-- ── FOTOS ── -->
   <div id="fotos" class="tab-panel">
     <p class="section-title">Fotogruppen – Freie Trauung 15.08.2026</p>
+    <div class="foto-progress">
+      <span id="foto-progress-text">0 / 22 fotografiert</span>
+      <div class="foto-progress-bar"><div class="foto-progress-fill" id="foto-progress-fill"></div></div>
+    </div>
     <div class="card" style="padding: 0; overflow: hidden;">
       <div class="foto-list">
         <div class="foto-row"><span class="foto-num">1</span><span class="foto-body"><span class="foto-name">Familie Klemps &amp; Kölms</span><span class="foto-people">Malte, Rebekka, Skadi, Heike, Axel, Norbert, Diana, Luki, Oma Gerda, Oma Uschi</span></span></div>
@@ -1280,7 +1334,7 @@
     document.getElementById('polter-submit-btn').disabled = true;
   } else {
     const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
-    const { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp }
+    const { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot, query, orderBy, serverTimestamp, arrayUnion, arrayRemove }
       = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
 
     const app = initializeApp(firebaseConfig);
@@ -1317,6 +1371,40 @@
 
     const q = query(col, orderBy('timestamp', 'asc'));
     onSnapshot(q, (snap) => renderList(snap));
+
+    // ── FOTOGRUPPEN ABHAKEN ──
+    const fotoStatusDoc = doc(db, 'fotogruppen', 'status');
+    const TOTAL_FOTOS = 22;
+    let checkedFotos = new Set();
+
+    // Abhak-Buttons an alle foto-rows anhängen
+    document.querySelectorAll('.foto-row').forEach(row => {
+      const num = parseInt(row.querySelector('.foto-num').textContent);
+      const btn = document.createElement('button');
+      btn.className = 'foto-check-btn';
+      btn.title = 'Abhaken';
+      btn.innerHTML = '✓';
+      btn.onclick = async () => {
+        if (checkedFotos.has(num)) {
+          await setDoc(fotoStatusDoc, { checked: arrayRemove(num) }, { merge: true });
+        } else {
+          await setDoc(fotoStatusDoc, { checked: arrayUnion(num) }, { merge: true });
+        }
+      };
+      row.appendChild(btn);
+    });
+
+    // Echtzeit-Listener für Foto-Status
+    onSnapshot(fotoStatusDoc, (snap) => {
+      checkedFotos = new Set(snap.exists() ? (snap.data().checked || []) : []);
+      document.querySelectorAll('.foto-row').forEach(row => {
+        const num = parseInt(row.querySelector('.foto-num').textContent);
+        row.classList.toggle('foto-done', checkedFotos.has(num));
+      });
+      const count = checkedFotos.size;
+      document.getElementById('foto-progress-text').textContent = `${count} / ${TOTAL_FOTOS} fotografiert`;
+      document.getElementById('foto-progress-fill').style.width = `${(count / TOTAL_FOTOS) * 100}%`;
+    });
 
     window.addPolterEintrag = async function() {
       const nameEl  = document.getElementById('polter-name-input');
