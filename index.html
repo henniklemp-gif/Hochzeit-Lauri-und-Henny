@@ -91,7 +91,9 @@
     position: relative;
     z-index: 10;
     margin-top: 100vh;
-    background: var(--bg);
+    background: rgba(250, 250, 248, 0.72);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
     border-radius: 20px 20px 0 0;
     min-height: 100vh;
   }
@@ -181,11 +183,11 @@
 
   /* CARDS & LAYOUT */
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.60);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--radius);
     padding: 1.25rem 1.5rem;
-    box-shadow: var(--shadow);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     display: flex;
     flex-direction: column;
   }
@@ -230,6 +232,7 @@
   .missing      { font-style: italic; color: var(--text-muted); font-size: 12px; }
 
   /* EVENT CARD */
+  .card.event-card-collapsible { padding: 0 !important; overflow: hidden; }
   .event-date-pill {
     font-family: Arial, sans-serif;
     font-size: 12px;
@@ -238,7 +241,6 @@
     border-radius: 20px;
     display: inline-block;
     width: fit-content;
-    margin-bottom: 10px;
     background: var(--accent-light);
     color: var(--accent-dark);
   }
@@ -327,7 +329,6 @@
   .info-lbl { color: var(--text-muted); min-width: 160px; }
 
   /* COLLAPSIBLE EVENT CARDS */
-  .event-card-collapsible { padding: 0; overflow: hidden; }
   .event-header {
     width: 100%;
     background: none;
@@ -339,8 +340,11 @@
     justify-content: space-between;
     gap: 10px;
     text-align: left;
+    border-radius: var(--radius);
+    transition: background 0.15s;
   }
-  .event-header:hover { background: var(--border-soft); }
+  .event-header:hover { background: rgba(255, 255, 255, 0.35); }
+  .event-header.open { border-radius: var(--radius) var(--radius) 0 0; }
   .event-header-left { display: flex; flex-direction: column; gap: 6px; }
   .event-header h3 { margin-bottom: 0; color: var(--text-primary); }
   .event-header * { color: var(--text-primary); }
@@ -354,8 +358,9 @@
   .event-header.open .chevron { transform: rotate(180deg); }
   .event-body {
     display: none;
-    padding: 0 1.5rem 1.25rem;
+    padding: 0.75rem 1rem 1rem;
     flex-direction: column;
+    gap: 10px;
   }
   .event-body.open { display: flex; }
 
@@ -401,11 +406,7 @@
     gap: 8px;
   }
   .task-row:last-child { border-bottom: none; }
-  .task-row::before {
-    content: '–';
-    color: var(--text-muted);
-    flex-shrink: 0;
-  }
+  .task-row::before { display: none; }
 
   /* PHONE LINKS */
   .tel-link {
@@ -450,8 +451,10 @@
       transform: none;
       transition: none;
       box-shadow: none;
-      border-bottom: 2px solid var(--border);
-      background: var(--surface);
+      border-bottom: 1px solid rgba(232, 228, 222, 0.6);
+      background: rgba(255, 255, 255, 0.65);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      backdrop-filter: blur(20px) saturate(1.4);
       width: auto;
       max-width: none;
       padding-top: 0;
@@ -990,7 +993,7 @@
         <span class="chevron">&#8964;</span>
       </button>
       <div class="event-body">
-        <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+        <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
 
           <div class="card event-card-collapsible" style="box-shadow:none;">
             <button class="event-header" onclick="toggleEvent(this)">
@@ -1046,7 +1049,7 @@
         <span class="chevron">&#8964;</span>
       </button>
       <div class="event-body">
-        <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+        <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
 
           <div class="card event-card-collapsible" style="box-shadow:none;">
             <button class="event-header" onclick="toggleEvent(this)">
@@ -1306,6 +1309,22 @@
     }
     requestAnimationFrame(step);
   }
+
+  (function() {
+    let snapping = false;
+    let lastY = 0;
+    window.addEventListener('scroll', function() {
+      const y = window.scrollY;
+      const vh = window.innerHeight;
+      const goingDown = y > lastY;
+      lastY = y;
+      if (!snapping && goingDown && y > vh * 0.5 && y < vh) {
+        snapping = true;
+        smoothScrollTo(vh, 380);
+        setTimeout(function() { snapping = false; }, 500);
+      }
+    }, { passive: true });
+  })();
 
   function toggleMobileNav() {
     document.getElementById('main-nav').classList.toggle('open');
