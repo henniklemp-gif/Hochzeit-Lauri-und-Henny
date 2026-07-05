@@ -437,6 +437,8 @@
   .info-lbl { min-width: 130px; }
 
   @media(min-width: 600px) {
+    .hero-img { object-position: center 60%; }
+    .hero-overlay { justify-content: flex-end; padding: 1.5rem 1rem 16vh; }
     .burger-btn { display: none; }
     .nav-backdrop { display: none !important; }
     .page-wrap { border-radius: 0; }
@@ -722,13 +724,13 @@
   <div class="nav-backdrop" id="nav-backdrop" onclick="toggleMobileNav()"></div>
   <nav class="tabs" id="main-nav">
     <button class="tab-btn active" onclick="showTab('veranstaltungen', this)">Veranstaltungen</button>
+    <button class="tab-btn" onclick="showTab('polterabend', this)">Essen Polterabend</button>
+    <button class="tab-btn" onclick="showTab('fotoupload', this)">Fotos hochladen</button>
+    <button class="tab-btn" id="unlock-nav-btn" onclick="showUnlockModal()">🔒</button>
     <button class="tab-btn protected-tab" onclick="showTab('dienstleister', this)" style="display:none">Dienstleister</button>
     <button class="tab-btn protected-tab" onclick="showTab('gaeste', this)" style="display:none">Gäste & Sitzplan</button>
     <button class="tab-btn protected-tab" onclick="showTab('fotos', this)" style="display:none">Fotogruppen</button>
     <button class="tab-btn protected-tab" onclick="showTab('aufgaben', this)" style="display:none">Aufgaben</button>
-    <button class="tab-btn" onclick="showTab('fotoupload', this)">Fotos hochladen</button>
-    <button class="tab-btn" onclick="showTab('polterabend', this)">Polterabend-Liste</button>
-    <button class="tab-btn" id="unlock-nav-btn" onclick="showUnlockModal()">🔒</button>
   </nav>
   <main>
 
