@@ -539,6 +539,37 @@
     border-radius: 3px;
     font-size: 11px;
   }
+  .polter-delete-btn {
+    margin-left: auto;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    padding: 2px 8px;
+    border: 1px solid #e0b0b0;
+    border-radius: 4px;
+    background: #fff5f5;
+    color: #c0392b;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .polter-delete-btn:hover { background: #fde; }
+  .admin-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
+  .admin-lock-btn {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .admin-lock-btn:hover { background: var(--border-soft); }
 </style>
 </head>
 <body>
@@ -1068,6 +1099,15 @@
         <p class="polter-empty">Noch keine Einträge.</p>
       </div>
     </div>
+
+    <div class="admin-bar">
+      <div id="admin-pw-box" style="display:none; display:flex; align-items:center; gap:8px;">
+        <input type="password" id="admin-pw-input" class="polter-input" placeholder="Passwort" style="max-width:160px; padding:6px 10px;">
+        <button onclick="checkAdminPw()" class="polter-btn" style="padding:6px 14px;">OK</button>
+        <span id="admin-pw-error" style="font-family:Arial,sans-serif; font-size:11px; color:#c0392b; display:none;">Falsches Passwort</span>
+      </div>
+      <button class="admin-lock-btn" id="admin-lock-btn" onclick="toggleAdminBar()">🔒 Admin</button>
+    </div>
   </div>
 
   </main>
@@ -1126,24 +1166,54 @@
 
   const configured = firebaseConfig.apiKey !== "DEIN_API_KEY";
 
+  let adminMode = false;
+
+  window.toggleAdminBar = function() {
+    const box = document.getElementById('admin-pw-box');
+    const visible = box.style.display === 'flex';
+    box.style.display = visible ? 'none' : 'flex';
+    if (adminMode && visible) {
+      adminMode = false;
+      document.getElementById('admin-lock-btn').textContent = '🔒 Admin';
+      renderList(lastSnap);
+    }
+  };
+
+  window.checkAdminPw = function() {
+    const input = document.getElementById('admin-pw-input');
+    const err   = document.getElementById('admin-pw-error');
+    if (input.value === 'werdasliestistdumm') {
+      adminMode = true;
+      document.getElementById('admin-pw-box').style.display = 'none';
+      document.getElementById('admin-lock-btn').textContent = '🔓 Admin aktiv';
+      input.value = '';
+      err.style.display = 'none';
+      renderList(lastSnap);
+    } else {
+      err.style.display = 'inline';
+      input.value = '';
+    }
+  };
+
   if (!configured) {
     document.getElementById('firebase-setup-hint').style.display = 'block';
     document.getElementById('polter-submit-btn').disabled = true;
   } else {
     const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
-    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp }
+    const { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp }
       = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
 
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
     const col = collection(db, 'polterabend');
 
-    // Echtzeit-Listener
-    const q = query(col, orderBy('timestamp', 'asc'));
-    onSnapshot(q, (snap) => {
-      const list = document.getElementById('polter-list');
+    let lastSnap = null;
+
+    function renderList(snap) {
+      lastSnap = snap;
+      const list  = document.getElementById('polter-list');
       const badge = document.getElementById('polter-count-badge');
-      if (snap.empty) {
+      if (!snap || snap.empty) {
         list.innerHTML = '<p class="polter-empty">Noch keine Einträge.</p>';
         badge.style.display = 'none';
         return;
@@ -1154,11 +1224,21 @@
         const row = document.createElement('div');
         row.className = 'polter-row';
         row.innerHTML = `<span class="polter-name">${escHtml(name)}</span><span class="polter-essen">${escHtml(essen)}</span>`;
+        if (adminMode) {
+          const btn = document.createElement('button');
+          btn.className = 'polter-delete-btn';
+          btn.textContent = 'Löschen';
+          btn.onclick = () => deleteDoc(doc(db, 'polterabend', d.id));
+          row.appendChild(btn);
+        }
         list.appendChild(row);
       });
       badge.textContent = snap.size + ' Einträge';
       badge.style.display = 'inline-block';
-    });
+    }
+
+    const q = query(col, orderBy('timestamp', 'asc'));
+    onSnapshot(q, (snap) => renderList(snap));
 
     window.addPolterEintrag = async function() {
       const nameEl  = document.getElementById('polter-name-input');
