@@ -904,10 +904,6 @@
   <!-- ── AUFGABEN ── -->
   <div id="aufgaben" class="tab-panel">
     <p class="section-title">Aufgaben der Trauzeugen</p>
-    <div class="foto-progress">
-      <span id="aufgaben-progress-text">0 / 15 erledigt</span>
-      <div class="foto-progress-bar"><div class="foto-progress-fill" id="aufgaben-progress-fill"></div></div>
-    </div>
     <div class="grid-2">
 
       <!-- Aileen -->
@@ -1424,23 +1420,39 @@
     // ── AUFGABEN ABHAKEN ──
     const aufgabenDoc = doc(db, 'aufgaben', 'status');
     let checkedAufgaben = new Set();
-    const totalAufgaben = document.querySelectorAll('.task-row').length;
+    const personCards = {};
 
-    document.querySelectorAll('.task-row').forEach(row => {
-      const key = row.textContent.trim();
-      row.dataset.taskKey = key;
-      const btn = document.createElement('button');
-      btn.className = 'task-check-btn';
-      btn.title = 'Abhaken';
-      btn.innerHTML = '✓';
-      btn.onclick = async () => {
-        if (checkedAufgaben.has(key)) {
-          await setDoc(aufgabenDoc, { checked: arrayRemove(key) }, { merge: true });
-        } else {
-          await setDoc(aufgabenDoc, { checked: arrayUnion(key) }, { merge: true });
-        }
-      };
-      row.appendChild(btn);
+    document.querySelectorAll('#aufgaben .card').forEach(card => {
+      const h3 = card.querySelector('h3');
+      if (!h3) return;
+      const person = h3.textContent.trim();
+      const tasks = Array.from(card.querySelectorAll('.task-row'));
+
+      // Fortschrittsbalken pro Person einfügen
+      const progressEl = document.createElement('div');
+      progressEl.className = 'foto-progress';
+      progressEl.style.marginBottom = '1rem';
+      progressEl.innerHTML = `<span class="person-progress-text">0 / ${tasks.length} erledigt</span><div class="foto-progress-bar"><div class="foto-progress-fill" style="width:0%"></div></div>`;
+      h3.insertAdjacentElement('afterend', progressEl);
+
+      personCards[person] = { tasks, progressEl };
+
+      tasks.forEach(row => {
+        const key = row.textContent.trim();
+        row.dataset.taskKey = key;
+        const btn = document.createElement('button');
+        btn.className = 'task-check-btn';
+        btn.title = 'Abhaken';
+        btn.innerHTML = '✓';
+        btn.onclick = async () => {
+          if (checkedAufgaben.has(key)) {
+            await setDoc(aufgabenDoc, { checked: arrayRemove(key) }, { merge: true });
+          } else {
+            await setDoc(aufgabenDoc, { checked: arrayUnion(key) }, { merge: true });
+          }
+        };
+        row.appendChild(btn);
+      });
     });
 
     onSnapshot(aufgabenDoc, (snap) => {
@@ -1448,9 +1460,12 @@
       document.querySelectorAll('.task-row').forEach(row => {
         row.classList.toggle('task-done', checkedAufgaben.has(row.dataset.taskKey));
       });
-      const count = checkedAufgaben.size;
-      document.getElementById('aufgaben-progress-text').textContent = `${count} / ${totalAufgaben} erledigt`;
-      document.getElementById('aufgaben-progress-fill').style.width = `${(count / totalAufgaben) * 100}%`;
+      Object.values(personCards).forEach(({ tasks, progressEl }) => {
+        const count = tasks.filter(r => checkedAufgaben.has(r.dataset.taskKey)).length;
+        const total = tasks.length;
+        progressEl.querySelector('.person-progress-text').textContent = `${count} / ${total} erledigt`;
+        progressEl.querySelector('.foto-progress-fill').style.width = `${(count / total) * 100}%`;
+      });
     });
 
     // ── FOTOGRUPPEN ABHAKEN ──
