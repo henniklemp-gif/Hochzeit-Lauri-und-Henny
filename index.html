@@ -479,6 +479,66 @@
     .grid-2 { grid-template-columns: 1fr 1fr; }
     .grid-3 { grid-template-columns: repeat(3, 1fr); }
   }
+
+  /* POLTERABEND LISTE */
+  .polter-input {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text-primary);
+    outline: none;
+    width: 100%;
+  }
+  .polter-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
+  .polter-btn {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s;
+    align-self: flex-start;
+  }
+  .polter-btn:hover { background: var(--accent-dark); }
+  .polter-btn:disabled { opacity: 0.5; cursor: default; }
+  .polter-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+  }
+  .polter-row:last-child { border-bottom: none; }
+  .polter-name { font-weight: 600; min-width: 120px; color: var(--text-primary); flex-shrink: 0; }
+  .polter-essen { color: var(--text-secondary); }
+  .polter-empty { font-family: Arial, sans-serif; font-size: 13px; color: var(--text-muted); font-style: italic; padding: 10px 0; }
+  .polter-error { font-family: Arial, sans-serif; font-size: 12px; color: #c0392b; margin-top: 6px; }
+  .polter-setup-hint {
+    background: var(--amber-light);
+    border: 1px solid #e8d08a;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--amber);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+  }
+  .polter-setup-hint code {
+    background: rgba(0,0,0,0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
 </style>
 </head>
 <body>
@@ -506,6 +566,7 @@
     <button class="tab-btn" onclick="showTab('gaeste', this)">Gäste & Sitzplan</button>
     <button class="tab-btn" onclick="showTab('fotos', this)">Fotos</button>
     <button class="tab-btn" onclick="showTab('aufgaben', this)">Aufgaben</button>
+    <button class="tab-btn" onclick="showTab('polterabend', this)">Polterabend-Liste</button>
   </nav>
   <main>
 
@@ -978,6 +1039,37 @@
   </div>
 
 
+  <!-- ── POLTERABEND-LISTE ── -->
+  <div id="polterabend" class="tab-panel">
+    <p class="section-title">Polterabend · 07.08.2026 – Wer bringt was mit?</p>
+
+    <div id="firebase-setup-hint" class="polter-setup-hint" style="display:none;">
+      ⚙️ <strong>Firebase noch nicht eingerichtet.</strong> Trage deinen Firebase-Config in die Datei ein (Bereich <code>FIREBASE CONFIG</code> im Script-Tag unten) damit die Liste gespeichert wird.
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem;">
+      <p class="section-title" style="margin-bottom:1rem;">Eintrag hinzufügen</p>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <input type="text" id="polter-name-input" class="polter-input" placeholder="Dein Name" maxlength="80" autocomplete="off">
+        <input type="text" id="polter-essen-input" class="polter-input" placeholder="Was bringst du mit?" maxlength="200" autocomplete="off">
+        <div>
+          <button id="polter-submit-btn" class="polter-btn" onclick="addPolterEintrag()">Eintragen</button>
+          <p id="polter-error" class="polter-error" style="display:none;"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem;">
+        <p class="section-title" style="margin-bottom:0;">Mitgebrachtes Essen</p>
+        <span id="polter-count-badge" class="badge badge-info" style="display:none;"></span>
+      </div>
+      <div id="polter-list">
+        <p class="polter-empty">Noch keine Einträge.</p>
+      </div>
+    </div>
+  </div>
+
   </main>
 </div>
 
@@ -1014,6 +1106,90 @@
     document.getElementById('burger-btn').classList.remove('open');
     document.getElementById('nav-backdrop').classList.remove('open');
     smoothScrollTo(document.querySelector('.page-wrap').offsetTop, 800);
+  }
+</script>
+
+<script type="module">
+  // ── FIREBASE CONFIG ──────────────────────────────────────────────────────────
+  // 1. Gehe zu https://console.firebase.google.com → Neues Projekt erstellen
+  // 2. Firestore Database aktivieren (Testmodus reicht für den Anfang)
+  // 3. Projekt-Einstellungen → Deine Apps → Web-App hinzufügen → Config kopieren
+  const firebaseConfig = {
+    apiKey:            "AIzaSyBvipQlYbrDoPOOJ6Odpjmooju63_OzBUU",
+    authDomain:        "website-liste.firebaseapp.com",
+    projectId:         "website-liste",
+    storageBucket:     "website-liste.firebasestorage.app",
+    messagingSenderId: "253304173711",
+    appId:             "1:253304173711:web:b5a2df229a136209686cfa"
+  };
+  // ────────────────────────────────────────────────────────────────────────────
+
+  const configured = firebaseConfig.apiKey !== "DEIN_API_KEY";
+
+  if (!configured) {
+    document.getElementById('firebase-setup-hint').style.display = 'block';
+    document.getElementById('polter-submit-btn').disabled = true;
+  } else {
+    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp }
+      = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+    const col = collection(db, 'polterabend');
+
+    // Echtzeit-Listener
+    const q = query(col, orderBy('timestamp', 'asc'));
+    onSnapshot(q, (snap) => {
+      const list = document.getElementById('polter-list');
+      const badge = document.getElementById('polter-count-badge');
+      if (snap.empty) {
+        list.innerHTML = '<p class="polter-empty">Noch keine Einträge.</p>';
+        badge.style.display = 'none';
+        return;
+      }
+      list.innerHTML = '';
+      snap.forEach(d => {
+        const { name, essen } = d.data();
+        const row = document.createElement('div');
+        row.className = 'polter-row';
+        row.innerHTML = `<span class="polter-name">${escHtml(name)}</span><span class="polter-essen">${escHtml(essen)}</span>`;
+        list.appendChild(row);
+      });
+      badge.textContent = snap.size + ' Einträge';
+      badge.style.display = 'inline-block';
+    });
+
+    window.addPolterEintrag = async function() {
+      const nameEl  = document.getElementById('polter-name-input');
+      const essenEl = document.getElementById('polter-essen-input');
+      const errEl   = document.getElementById('polter-error');
+      const btn     = document.getElementById('polter-submit-btn');
+      const name  = nameEl.value.trim();
+      const essen = essenEl.value.trim();
+      errEl.style.display = 'none';
+      if (!name || !essen) {
+        errEl.textContent = 'Bitte Name und Essen eintragen.';
+        errEl.style.display = 'block';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Wird gespeichert…';
+      try {
+        await addDoc(col, { name, essen, timestamp: serverTimestamp() });
+        nameEl.value  = '';
+        essenEl.value = '';
+      } catch(e) {
+        errEl.textContent = 'Fehler beim Speichern. Bitte erneut versuchen.';
+        errEl.style.display = 'block';
+      }
+      btn.disabled = false;
+      btn.textContent = 'Eintragen';
+    };
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 </script>
 
