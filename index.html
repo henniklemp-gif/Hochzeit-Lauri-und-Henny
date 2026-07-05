@@ -657,6 +657,33 @@
     transition: width 0.3s ease;
     width: 0%;
   }
+
+  /* AUFGABEN ABHAKEN */
+  .task-check-btn {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: transparent;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .task-check-btn:hover { border-color: var(--green); }
+  .task-row.task-done .task-check-btn {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+  .task-row.task-done { color: var(--text-muted); opacity: 0.6; }
+  .task-row.task-done::before { color: var(--text-muted); }
 </style>
 </head>
 <body>
@@ -877,6 +904,10 @@
   <!-- ── AUFGABEN ── -->
   <div id="aufgaben" class="tab-panel">
     <p class="section-title">Aufgaben der Trauzeugen</p>
+    <div class="foto-progress">
+      <span id="aufgaben-progress-text">0 / 15 erledigt</span>
+      <div class="foto-progress-bar"><div class="foto-progress-fill" id="aufgaben-progress-fill"></div></div>
+    </div>
     <div class="grid-2">
 
       <!-- Aileen -->
@@ -1389,6 +1420,38 @@
 
     const q = query(col, orderBy('timestamp', 'asc'));
     onSnapshot(q, (snap) => renderList(snap));
+
+    // ── AUFGABEN ABHAKEN ──
+    const aufgabenDoc = doc(db, 'aufgaben', 'status');
+    let checkedAufgaben = new Set();
+    const totalAufgaben = document.querySelectorAll('.task-row').length;
+
+    document.querySelectorAll('.task-row').forEach(row => {
+      const key = row.textContent.trim();
+      row.dataset.taskKey = key;
+      const btn = document.createElement('button');
+      btn.className = 'task-check-btn';
+      btn.title = 'Abhaken';
+      btn.innerHTML = '✓';
+      btn.onclick = async () => {
+        if (checkedAufgaben.has(key)) {
+          await setDoc(aufgabenDoc, { checked: arrayRemove(key) }, { merge: true });
+        } else {
+          await setDoc(aufgabenDoc, { checked: arrayUnion(key) }, { merge: true });
+        }
+      };
+      row.appendChild(btn);
+    });
+
+    onSnapshot(aufgabenDoc, (snap) => {
+      checkedAufgaben = new Set(snap.exists() ? (snap.data().checked || []) : []);
+      document.querySelectorAll('.task-row').forEach(row => {
+        row.classList.toggle('task-done', checkedAufgaben.has(row.dataset.taskKey));
+      });
+      const count = checkedAufgaben.size;
+      document.getElementById('aufgaben-progress-text').textContent = `${count} / ${totalAufgaben} erledigt`;
+      document.getElementById('aufgaben-progress-fill').style.width = `${(count / totalAufgaben) * 100}%`;
+    });
 
     // ── FOTOGRUPPEN ABHAKEN ──
     const fotoStatusDoc = doc(db, 'fotogruppen', 'status');
