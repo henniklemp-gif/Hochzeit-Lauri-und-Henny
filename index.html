@@ -699,6 +699,7 @@
     <button class="tab-btn protected-tab" onclick="showTab('gaeste', this)" style="display:none">Gäste & Sitzplan</button>
     <button class="tab-btn protected-tab" onclick="showTab('fotos', this)" style="display:none">Fotogruppen</button>
     <button class="tab-btn protected-tab" onclick="showTab('aufgaben', this)" style="display:none">Aufgaben</button>
+    <button class="tab-btn" onclick="showTab('fotoupload', this)">Fotos hochladen</button>
     <button class="tab-btn" onclick="showTab('polterabend', this)">Polterabend-Liste</button>
     <button class="tab-btn" id="unlock-nav-btn" onclick="showUnlockModal()">🔒</button>
   </nav>
@@ -1176,6 +1177,23 @@
 
   </div>
 
+
+  <!-- ── FOTO-UPLOAD ── -->
+  <div id="fotoupload" class="tab-panel">
+    <p class="section-title">Fotos hochladen</p>
+    <div style="border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow);">
+      <iframe
+        src="https://upload.viewfoundstories.com/Hochzeit_LH"
+        style="width:100%; height:80vh; border:none; display:block;"
+        allow="camera; microphone"
+        title="Fotos hochladen">
+      </iframe>
+    </div>
+    <p style="font-family:Arial,sans-serif; font-size:12px; color:var(--text-muted); margin-top:8px; text-align:center;">
+      Falls die Seite nicht lädt, direkt öffnen:
+      <a href="https://upload.viewfoundstories.com/Hochzeit_LH" target="_blank" class="map-link" style="margin-top:0;">upload.viewfoundstories.com/Hochzeit_LH</a>
+    </p>
+  </div>
 
   <!-- ── POLTERABEND-LISTE ── -->
   <div id="polterabend" class="tab-panel">
