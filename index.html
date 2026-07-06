@@ -632,7 +632,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    border: 2px solid var(--border);
+    border: 2px solid var(--text-muted);
     background: none;
     cursor: pointer;
     font-size: 14px;
@@ -664,25 +664,43 @@
   .foto-progress-bar {
     flex: 1;
     height: 6px;
-    background: var(--border);
+    background: #ccc8c2;
     border-radius: 3px;
     overflow: hidden;
   }
   .foto-progress-fill {
     height: 100%;
-    background: var(--green);
+    background: #3d6b4e;
     border-radius: 3px;
     transition: width 0.3s ease;
     width: 0%;
   }
 
   /* AUFGABEN ABHAKEN */
+  .task-delete-btn {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e74c3c;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  .task-delete-btn:hover { background: #c0392b; }
   .task-check-btn {
     margin-left: auto;
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 2px solid var(--border);
+    border: 2px solid var(--text-muted);
     background: none;
     cursor: pointer;
     font-size: 12px;
@@ -922,6 +940,25 @@
   <!-- ── AUFGABEN ── -->
   <div id="aufgaben" class="tab-panel">
     <p class="section-title">Aufgaben der Trauzeugen</p>
+
+    <div class="card" id="aufgabe-add-card" style="margin-bottom:1.5rem; display:none;">
+      <p class="section-title" style="margin-bottom:1rem;">Aufgabe hinzufügen</p>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <select id="aufgabe-person-select" class="polter-input">
+          <option value="">Trauzeuge auswählen…</option>
+          <option value="Aileen">Aileen</option>
+          <option value="Juli">Juli</option>
+          <option value="Robin">Robin</option>
+          <option value="Sören">Sören</option>
+        </select>
+        <input type="text" id="aufgabe-text-input" class="polter-input" placeholder="Aufgabe beschreiben" maxlength="200" autocomplete="off">
+        <div>
+          <button id="aufgabe-submit-btn" class="polter-btn" onclick="addAufgabe()">Hinzufügen</button>
+          <p id="aufgabe-error" class="polter-error" style="display:none;"></p>
+        </div>
+      </div>
+    </div>
+
     <div class="grid-2">
 
       <!-- Aileen -->
@@ -936,6 +973,7 @@
           <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
           <div class="task-row">Mentale Unterstützung beim „Getting Ready"</div>
         </div>
+        <div class="dynamic-tasks-container" data-person="Aileen"></div>
       </div>
 
       <!-- Juli -->
@@ -951,6 +989,7 @@
           <div class="task-row">Deko in der Location</div>
           <div class="task-row">Blumen abholen</div>
         </div>
+        <div class="dynamic-tasks-container" data-person="Juli"></div>
       </div>
 
       <!-- Robin -->
@@ -966,6 +1005,7 @@
           <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
           <div class="task-row">Mentale Unterstützung beim „Getting Ready"</div>
         </div>
+        <div class="dynamic-tasks-container" data-person="Robin"></div>
       </div>
 
       <!-- Sören -->
@@ -981,8 +1021,19 @@
           <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
           <div class="task-row">Mentale Unterstützung beim „Getting Ready"</div>
         </div>
+        <div class="dynamic-tasks-container" data-person="Sören"></div>
       </div>
 
+    </div>
+
+    <div class="admin-bar">
+      <div id="admin-pw-box-2" style="display:none; align-items:center; gap:8px;">
+        <input type="password" id="admin-pw-input-2" class="polter-input" placeholder="Passwort" style="max-width:160px; padding:6px 10px;"
+          onkeydown="if(event.key==='Enter') checkAdminPw2()">
+        <button onclick="checkAdminPw2()" class="polter-btn" style="padding:6px 14px;">OK</button>
+        <span id="admin-pw-error-2" style="font-family:Arial,sans-serif; font-size:11px; color:#c0392b; display:none;">Falsches Passwort</span>
+      </div>
+      <button class="admin-lock-btn" id="admin-lock-btn-2" onclick="toggleAdminBar2()">🔒 Admin</button>
     </div>
   </div>
 
@@ -1380,6 +1431,7 @@
   let adminMode = false;
   let lastSnap  = null;
   let renderList = () => {};
+  let renderDynamicTasks = () => {};
 
   window.toggleAdminBar = function() {
     const box = document.getElementById('admin-pw-box');
@@ -1388,7 +1440,12 @@
     if (adminMode && visible) {
       adminMode = false;
       document.getElementById('admin-lock-btn').textContent = '🔒 Admin';
+      const btn2 = document.getElementById('admin-lock-btn-2');
+      if (btn2) btn2.textContent = '🔒 Admin';
       renderList(lastSnap);
+      const addCard = document.getElementById('aufgabe-add-card');
+      if (addCard) addCard.style.display = 'none';
+      renderDynamicTasks();
     }
   };
 
@@ -1399,9 +1456,49 @@
       adminMode = true;
       document.getElementById('admin-pw-box').style.display = 'none';
       document.getElementById('admin-lock-btn').textContent = '🔓 Admin aktiv';
+      const btn2 = document.getElementById('admin-lock-btn-2');
+      if (btn2) btn2.textContent = '🔓 Admin aktiv';
       input.value = '';
       err.style.display = 'none';
       renderList(lastSnap);
+      const addCard = document.getElementById('aufgabe-add-card');
+      if (addCard) addCard.style.display = '';
+      renderDynamicTasks();
+    } else {
+      err.style.display = 'inline';
+      input.value = '';
+    }
+  };
+
+  window.toggleAdminBar2 = function() {
+    const box = document.getElementById('admin-pw-box-2');
+    const visible = box.style.display === 'flex';
+    box.style.display = visible ? 'none' : 'flex';
+    if (adminMode && visible) {
+      adminMode = false;
+      document.getElementById('admin-lock-btn').textContent = '🔒 Admin';
+      document.getElementById('admin-lock-btn-2').textContent = '🔒 Admin';
+      renderList(lastSnap);
+      const addCard = document.getElementById('aufgabe-add-card');
+      if (addCard) addCard.style.display = 'none';
+      renderDynamicTasks();
+    }
+  };
+
+  window.checkAdminPw2 = function() {
+    const input = document.getElementById('admin-pw-input-2');
+    const err   = document.getElementById('admin-pw-error-2');
+    if (input.value === 'werdasliestistdumm') {
+      adminMode = true;
+      document.getElementById('admin-pw-box-2').style.display = 'none';
+      document.getElementById('admin-lock-btn').textContent = '🔓 Admin aktiv';
+      document.getElementById('admin-lock-btn-2').textContent = '🔓 Admin aktiv';
+      input.value = '';
+      err.style.display = 'none';
+      renderList(lastSnap);
+      const addCard = document.getElementById('aufgabe-add-card');
+      if (addCard) addCard.style.display = '';
+      renderDynamicTasks();
     } else {
       err.style.display = 'inline';
       input.value = '';
@@ -1453,27 +1550,36 @@
 
     // ── AUFGABEN ABHAKEN ──
     const aufgabenDoc = doc(db, 'aufgaben', 'status');
+    const aufgabenTasksCol = collection(db, 'aufgaben_tasks');
     let checkedAufgaben = new Set();
+    let deletedAufgaben = new Set();
+    let dynamicTasksData = [];
     const personCards = {};
 
-    document.querySelectorAll('#aufgaben .card').forEach(card => {
+    document.querySelectorAll('#aufgaben .card:not(#aufgabe-add-card)').forEach(card => {
       const h3 = card.querySelector('h3');
       if (!h3) return;
       const person = h3.textContent.trim();
       const tasks = Array.from(card.querySelectorAll('.task-row'));
+      const dynamicContainer = card.querySelector('.dynamic-tasks-container');
 
-      // Fortschrittsbalken pro Person einfügen
       const progressEl = document.createElement('div');
       progressEl.className = 'foto-progress';
       progressEl.style.marginBottom = '1rem';
       progressEl.innerHTML = `<span class="person-progress-text">0 / ${tasks.length} erledigt</span><div class="foto-progress-bar"><div class="foto-progress-fill" style="width:0%"></div></div>`;
       h3.insertAdjacentElement('afterend', progressEl);
 
-      personCards[person] = { tasks, progressEl };
+      personCards[person] = { tasks, progressEl, dynamicContainer };
 
       tasks.forEach(row => {
-        const key = row.textContent.trim();
+        const textContent = row.textContent.trim();
+        const key = person + '::' + textContent;
         row.dataset.taskKey = key;
+        const textSpan = document.createElement('span');
+        textSpan.style.flex = '1';
+        textSpan.textContent = textContent;
+        row.innerHTML = '';
+        row.appendChild(textSpan);
         const btn = document.createElement('button');
         btn.className = 'task-check-btn';
         btn.title = 'Abhaken';
@@ -1489,18 +1595,114 @@
       });
     });
 
-    onSnapshot(aufgabenDoc, (snap) => {
-      checkedAufgaben = new Set(snap.exists() ? (snap.data().checked || []) : []);
-      document.querySelectorAll('.task-row').forEach(row => {
-        row.classList.toggle('task-done', checkedAufgaben.has(row.dataset.taskKey));
-      });
-      Object.values(personCards).forEach(({ tasks, progressEl }) => {
-        const count = tasks.filter(r => checkedAufgaben.has(r.dataset.taskKey)).length;
-        const total = tasks.length;
+    function updateAllProgress() {
+      Object.values(personCards).forEach(({ tasks, progressEl, dynamicContainer }) => {
+        const visibleStatic = tasks.filter(r => !deletedAufgaben.has(r.dataset.taskKey));
+        const staticCount = visibleStatic.filter(r => checkedAufgaben.has(r.dataset.taskKey)).length;
+        const dynRows = dynamicContainer ? Array.from(dynamicContainer.querySelectorAll('.task-row')) : [];
+        const dynCount = dynRows.filter(r => checkedAufgaben.has(r.dataset.taskKey)).length;
+        const total = visibleStatic.length + dynRows.length;
+        const count = staticCount + dynCount;
         progressEl.querySelector('.person-progress-text').textContent = `${count} / ${total} erledigt`;
-        progressEl.querySelector('.foto-progress-fill').style.width = `${(count / total) * 100}%`;
+        progressEl.querySelector('.foto-progress-fill').style.width = total > 0 ? `${(count / total) * 100}%` : '0%';
       });
+    }
+
+    renderDynamicTasks = function() {
+      document.querySelectorAll('.dynamic-tasks-container').forEach(c => { c.innerHTML = ''; });
+      dynamicTasksData.forEach(task => {
+        const pc = personCards[task.person];
+        if (!pc || !pc.dynamicContainer) return;
+        const row = document.createElement('div');
+        row.className = 'task-row';
+        row.dataset.taskKey = task.id;
+        const span = document.createElement('span');
+        span.style.flex = '1';
+        span.textContent = task.text;
+        row.appendChild(span);
+        if (checkedAufgaben.has(task.id)) row.classList.add('task-done');
+        const checkBtn = document.createElement('button');
+        checkBtn.className = 'task-check-btn';
+        checkBtn.title = 'Abhaken';
+        checkBtn.innerHTML = '✓';
+        checkBtn.onclick = async () => {
+          if (checkedAufgaben.has(task.id)) {
+            await setDoc(aufgabenDoc, { checked: arrayRemove(task.id) }, { merge: true });
+          } else {
+            await setDoc(aufgabenDoc, { checked: arrayUnion(task.id) }, { merge: true });
+          }
+        };
+        row.appendChild(checkBtn);
+        if (adminMode) {
+          const delBtn = document.createElement('button');
+          delBtn.className = 'task-delete-btn';
+          delBtn.innerHTML = '&minus;';
+          delBtn.title = 'Aufgabe löschen';
+          delBtn.style.marginLeft = '6px';
+          delBtn.onclick = () => deleteDoc(doc(db, 'aufgaben_tasks', task.id));
+          row.appendChild(delBtn);
+        }
+        pc.dynamicContainer.appendChild(row);
+      });
+      document.querySelectorAll('#aufgaben .card:not(#aufgabe-add-card) .task-row').forEach(row => {
+        const existing = row.querySelector('.task-delete-btn');
+        if (adminMode && !existing && row.dataset.taskKey) {
+          const delBtn = document.createElement('button');
+          delBtn.className = 'task-delete-btn';
+          delBtn.innerHTML = '&minus;';
+          delBtn.title = 'Aufgabe löschen';
+          delBtn.style.marginLeft = '6px';
+          delBtn.onclick = async () => {
+            await setDoc(aufgabenDoc, { deleted: arrayUnion(row.dataset.taskKey) }, { merge: true });
+          };
+          row.appendChild(delBtn);
+        } else if (!adminMode && existing) {
+          existing.remove();
+        }
+      });
+      updateAllProgress();
+    };
+
+    onSnapshot(query(aufgabenTasksCol, orderBy('timestamp', 'asc')), (snap) => {
+      dynamicTasksData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderDynamicTasks();
     });
+
+    onSnapshot(aufgabenDoc, (snap) => {
+      const data = snap.exists() ? snap.data() : {};
+      checkedAufgaben = new Set(data.checked || []);
+      deletedAufgaben = new Set(data.deleted || []);
+      document.querySelectorAll('#aufgaben .card:not(#aufgabe-add-card) .task-row').forEach(row => {
+        if (!row.dataset.taskKey) return;
+        row.classList.toggle('task-done', checkedAufgaben.has(row.dataset.taskKey));
+        row.style.display = deletedAufgaben.has(row.dataset.taskKey) ? 'none' : '';
+      });
+      updateAllProgress();
+    });
+
+    window.addAufgabe = async function() {
+      const personEl = document.getElementById('aufgabe-person-select');
+      const textEl   = document.getElementById('aufgabe-text-input');
+      const errEl    = document.getElementById('aufgabe-error');
+      const btn      = document.getElementById('aufgabe-submit-btn');
+      const person   = personEl.value.trim();
+      const text     = textEl.value.trim();
+      errEl.style.display = 'none';
+      if (!person) { errEl.textContent = 'Bitte einen Trauzeugen auswählen.'; errEl.style.display = 'block'; return; }
+      if (!text)   { errEl.textContent = 'Bitte eine Aufgabe eingeben.'; errEl.style.display = 'block'; return; }
+      btn.disabled = true;
+      btn.textContent = 'Wird gespeichert…';
+      try {
+        await addDoc(aufgabenTasksCol, { person, text, timestamp: serverTimestamp() });
+        textEl.value  = '';
+        personEl.value = '';
+      } catch(e) {
+        errEl.textContent = 'Fehler beim Speichern. Bitte erneut versuchen.';
+        errEl.style.display = 'block';
+      }
+      btn.disabled = false;
+      btn.textContent = 'Hinzufügen';
+    };
 
     // ── FOTOGRUPPEN ABHAKEN ──
     const fotoStatusDoc = doc(db, 'fotogruppen', 'status');
