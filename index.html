@@ -761,10 +761,11 @@
     <button class="tab-btn" onclick="showTab('polterabend', this)">Essen Polterabend</button>
     <button class="tab-btn" onclick="showTab('fotoupload', this)">Fotos hochladen</button>
     <button class="tab-btn" id="unlock-nav-btn" onclick="showUnlockModal()">🔒</button>
+    <button class="tab-btn protected-tab" onclick="showTab('ablaufplan', this)" style="display:none">Ablaufplan</button>
+    <button class="tab-btn protected-tab" onclick="showTab('aufgaben', this)" style="display:none">Aufgaben</button>
+    <button class="tab-btn protected-tab" onclick="showTab('fotos', this)" style="display:none">Fotogruppen</button>
     <button class="tab-btn protected-tab" onclick="showTab('dienstleister', this)" style="display:none">Dienstleister</button>
     <button class="tab-btn protected-tab" onclick="showTab('gaeste', this)" style="display:none">Gäste & Sitzplan</button>
-    <button class="tab-btn protected-tab" onclick="showTab('fotos', this)" style="display:none">Fotogruppen</button>
-    <button class="tab-btn protected-tab" onclick="showTab('aufgaben', this)" style="display:none">Aufgaben</button>
   </nav>
   <main>
 
@@ -807,8 +808,99 @@
         </button>
         <div class="event-body">
           <div class="timeline">
-            <div class="trow"><span class="ttime">17:00</span><span>Ankunft</span></div>
-            <div class="trow"><span class="ttime">17:15</span><span>Standesamtliche Trauung</span></div>
+            <div class="trow"><span class="ttime">17:00</span><span>Ankunft Gäste</span></div>
+            <div class="trow"><span class="ttime">17:15</span><span>Beginn Standesamtliche Trauung</span></div>
+            <div class="trow"><span class="ttime">17:45</span><span>Beginn kleiner Sektempfang Schloss Winsen</span></div>
+            <div class="trow"><span class="ttime">Danach</span><span>Grillessen bei Henriks Eltern</span></div>
+          </div>
+          <div style="margin-top:10px;">
+            <span class="badge badge-event">Mit Gästeliste</span>
+          </div>
+          <div class="map-footer">
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Schloßplatz+11,+21423+Winsen+Luhe" target="_blank">
+              <span class="map-icon">📍</span>Schloßpl. 11, 21423 Winsen (Luhe)
+            </a>
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Hoher+Weg+5,+21435+Stelle" target="_blank">
+              <span class="map-icon">📍</span>Grillessen: Hoher Weg 5, 21435 Stelle
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card event-card-collapsible">
+        <button class="event-header" onclick="toggleEvent(this)">
+          <div class="event-header-left">
+            <span class="event-date-pill pill-rose">15.08.2026</span>
+            <h3>Freie Trauung & Feier</h3>
+          </div>
+          <span class="chevron">&#8964;</span>
+        </button>
+        <div class="event-body">
+          <div class="timeline">
+            <div class="trow"><span class="ttime">14:30</span><span>Ankunft Gäste</span></div>
+            <div class="trow"><span class="ttime">15:00</span><span>Beginn Freie Trauung am Reihersee</span></div>
+            <div class="trow"><span class="ttime">16:30</span><span>Empfang in der Glashütte</span></div>
+            <div class="trow"><span class="ttime">04:00</span><span>Ende</span></div>
+          </div>
+          <div style="margin-top:10px;">
+            <span class="badge badge-event">Mit Gästeliste</span>
+          </div>
+          <div class="map-footer">
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Auf+den+Bergen+133,+21382+Brietlingen" target="_blank">
+              <span class="map-icon">📍</span>Reihersee: Auf den Bergen 133, 21382 Brietlingen
+            </a>
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Erbstorfer+Landstraße+3,+21365+Adendorf" target="_blank">
+              <span class="map-icon">📍</span>Glashütte, Erbstorfer Landstraße 3, 21365 Adendorf
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── ABLAUFPLAN (DETAIL) ── -->
+  <div id="ablaufplan" class="tab-panel">
+    <p class="section-title">Detaillierter Ablaufplan</p>
+    <div class="grid-3">
+
+      <div class="card event-card-collapsible">
+        <button class="event-header" onclick="toggleEvent(this)">
+          <div class="event-header-left">
+            <span class="event-date-pill pill-amber">07.08.2026</span>
+            <h3>Polterabend</h3>
+          </div>
+          <span class="chevron">&#8964;</span>
+        </button>
+        <div class="event-body">
+          <div class="timeline">
+            <div class="trow"><span class="ttime">19:00</span><span>Beginn</span></div>
+            <div class="trow"><span class="ttime">03:00</span><span>Ende</span></div>
+          </div>
+          <div style="margin-top:10px;">
+            <span class="badge badge-event">Ohne Einladungen – offene Gästeliste</span>
+          </div>
+          <div class="map-footer">
+            <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Wedemarsch+14,+21423+Winsen+(Luhe)" target="_blank">
+              <span class="map-icon">📍</span>Wedemarsch 14, 21423 Winsen (Luhe)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card event-card-collapsible">
+        <button class="event-header" onclick="toggleEvent(this)">
+          <div class="event-header-left">
+            <span class="event-date-pill pill-blue">13.08.2026</span>
+            <h3>Standesamtliche Trauung</h3>
+          </div>
+          <span class="chevron">&#8964;</span>
+        </button>
+        <div class="event-body">
+          <div class="timeline">
+            <div class="trow"><span class="ttime">17:00</span><span>Ankunft Gäste</span></div>
+            <div class="trow"><span class="ttime">17:15</span><span>Beginn Standesamtliche Trauung</span></div>
+            <div class="trow"><span class="ttime">17:45</span><span>Beginn kleiner Sektempfang Schloss Winsen</span></div>
             <div class="trow"><span class="ttime">Danach</span><span>Grillessen bei Henriks Eltern</span></div>
           </div>
           <div class="map-footer">
@@ -835,8 +927,8 @@
             <div class="trow"><span class="ttime">10:00</span><span>Lauri Schminken Douglas</span></div>
             <div class="trow"><span class="ttime">12:00</span><span>Lauri Frisör</span></div>
             <div class="trow"><span class="ttime">14:15</span><span>Henny Ankunft Reihersee</span></div>
-            <div class="trow"><span class="ttime">14:30</span><span>Eintreffen der Gäste</span></div>
-            <div class="trow"><span class="ttime">15:00</span><span>Freie Trauung am Reihersee inkl. Fotoshooting</span></div>
+            <div class="trow"><span class="ttime">14:30</span><span>Ankunft Gäste</span></div>
+            <div class="trow"><span class="ttime">15:00</span><span>Beginn Freie Trauung am Reihersee inkl. Fotoshooting</span></div>
             <div class="trow"><span class="ttime">16:30</span><span>Empfang in der Glashütte</span></div>
             <div class="trow"><span class="ttime">18:00</span><span>Festliches Abendessen</span></div>
             <div class="trow"><span class="ttime">20:00</span><span>Party</span></div>
