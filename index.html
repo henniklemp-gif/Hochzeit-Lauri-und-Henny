@@ -1043,6 +1043,11 @@
           <option value="Robin">Robin</option>
           <option value="Sören">Sören</option>
         </select>
+        <select id="aufgabe-date-select" class="polter-input">
+          <option value="">Datum auswählen…</option>
+          <option value="13.08">Standesamt · 13.08.2026</option>
+          <option value="15.08">Freie Trauung · 15.08.2026</option>
+        </select>
         <input type="text" id="aufgabe-text-input" class="polter-input" placeholder="Aufgabe beschreiben" maxlength="200" autocomplete="off">
         <div>
           <button id="aufgabe-submit-btn" class="polter-btn" onclick="addAufgabe()">Hinzufügen</button>
@@ -1060,12 +1065,13 @@
           <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
           <div class="task-row">Foto von Personalausweis Lauri schicken</div>
           <div class="task-row">Personalausweis mitbringen</div>
+          <div class="dynamic-tasks-container" data-person="Aileen" data-date="13.08"></div>
         </div>
         <div>
           <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
           <div class="task-row">Mentale Unterstützung beim „Getting Ready"</div>
+          <div class="dynamic-tasks-container" data-person="Aileen" data-date="15.08"></div>
         </div>
-        <div class="dynamic-tasks-container" data-person="Aileen"></div>
       </div>
 
       <!-- Juli -->
@@ -1075,13 +1081,14 @@
           <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
           <div class="task-row">Foto von Personalausweis Lauri schicken</div>
           <div class="task-row">Personalausweis mitbringen</div>
+          <div class="dynamic-tasks-container" data-person="Juli" data-date="13.08"></div>
         </div>
         <div>
           <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
           <div class="task-row">Deko in der Location</div>
           <div class="task-row">Blumen abholen</div>
+          <div class="dynamic-tasks-container" data-person="Juli" data-date="15.08"></div>
         </div>
-        <div class="dynamic-tasks-container" data-person="Juli"></div>
       </div>
 
       <!-- Robin -->
@@ -1092,12 +1099,13 @@
           <div class="task-row">Foto von Personalausweis an Henny schicken</div>
           <div class="task-row">Personalausweis mitbringen</div>
           <div class="task-row">Ringe</div>
+          <div class="dynamic-tasks-container" data-person="Robin" data-date="13.08"></div>
         </div>
         <div>
           <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
           <div class="task-row">Mentale Unterstützung beim „Getting Ready"</div>
+          <div class="dynamic-tasks-container" data-person="Robin" data-date="15.08"></div>
         </div>
-        <div class="dynamic-tasks-container" data-person="Robin"></div>
       </div>
 
       <!-- Sören -->
@@ -1108,12 +1116,13 @@
           <div class="task-row">Foto von Personalausweis an Henny schicken</div>
           <div class="task-row">Personalausweis mitbringen</div>
           <div class="task-row">Verwahrung der wichtigen Dokumente</div>
+          <div class="dynamic-tasks-container" data-person="Sören" data-date="13.08"></div>
         </div>
         <div>
           <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
           <div class="task-row">Mentale Unterstützung beim „Getting Ready"</div>
+          <div class="dynamic-tasks-container" data-person="Sören" data-date="15.08"></div>
         </div>
-        <div class="dynamic-tasks-container" data-person="Sören"></div>
       </div>
 
     </div>
@@ -1649,7 +1658,8 @@
       if (!h3) return;
       const person = h3.textContent.trim();
       const tasks = Array.from(card.querySelectorAll('.task-row'));
-      const dynamicContainer = card.querySelector('.dynamic-tasks-container');
+      const dynamicContainers = {};
+      card.querySelectorAll('.dynamic-tasks-container').forEach(c => { dynamicContainers[c.dataset.date] = c; });
 
       const progressEl = document.createElement('div');
       progressEl.className = 'foto-progress';
@@ -1657,7 +1667,7 @@
       progressEl.innerHTML = `<span class="person-progress-text">0 / ${tasks.length} erledigt</span><div class="foto-progress-bar"><div class="foto-progress-fill" style="width:0%"></div></div>`;
       h3.insertAdjacentElement('afterend', progressEl);
 
-      personCards[person] = { tasks, progressEl, dynamicContainer };
+      personCards[person] = { card, tasks, progressEl, dynamicContainers };
 
       tasks.forEach(row => {
         const textContent = row.textContent.trim();
@@ -1684,10 +1694,10 @@
     });
 
     function updateAllProgress() {
-      Object.values(personCards).forEach(({ tasks, progressEl, dynamicContainer }) => {
+      Object.values(personCards).forEach(({ card, tasks, progressEl }) => {
         const visibleStatic = tasks.filter(r => !deletedAufgaben.has(r.dataset.taskKey));
         const staticCount = visibleStatic.filter(r => checkedAufgaben.has(r.dataset.taskKey)).length;
-        const dynRows = dynamicContainer ? Array.from(dynamicContainer.querySelectorAll('.task-row')) : [];
+        const dynRows = Array.from(card.querySelectorAll('.dynamic-tasks-container .task-row'));
         const dynCount = dynRows.filter(r => checkedAufgaben.has(r.dataset.taskKey)).length;
         const total = visibleStatic.length + dynRows.length;
         const count = staticCount + dynCount;
@@ -1700,7 +1710,9 @@
       document.querySelectorAll('.dynamic-tasks-container').forEach(c => { c.innerHTML = ''; });
       dynamicTasksData.forEach(task => {
         const pc = personCards[task.person];
-        if (!pc || !pc.dynamicContainer) return;
+        if (!pc) return;
+        const container = pc.dynamicContainers[task.date] || Object.values(pc.dynamicContainers)[0];
+        if (!container) return;
         const row = document.createElement('div');
         row.className = 'task-row';
         row.dataset.taskKey = task.id;
@@ -1730,7 +1742,7 @@
           delBtn.onclick = () => deleteDoc(doc(db, 'aufgaben_tasks', task.id));
           row.appendChild(delBtn);
         }
-        pc.dynamicContainer.appendChild(row);
+        container.appendChild(row);
       });
       document.querySelectorAll('#aufgaben .card:not(#aufgabe-add-card) .task-row').forEach(row => {
         const existing = row.querySelector('.task-delete-btn');
@@ -1770,20 +1782,24 @@
 
     window.addAufgabe = async function() {
       const personEl = document.getElementById('aufgabe-person-select');
+      const dateEl   = document.getElementById('aufgabe-date-select');
       const textEl   = document.getElementById('aufgabe-text-input');
       const errEl    = document.getElementById('aufgabe-error');
       const btn      = document.getElementById('aufgabe-submit-btn');
       const person   = personEl.value.trim();
+      const date     = dateEl.value.trim();
       const text     = textEl.value.trim();
       errEl.style.display = 'none';
       if (!person) { errEl.textContent = 'Bitte einen Trauzeugen auswählen.'; errEl.style.display = 'block'; return; }
+      if (!date)   { errEl.textContent = 'Bitte ein Datum auswählen.'; errEl.style.display = 'block'; return; }
       if (!text)   { errEl.textContent = 'Bitte eine Aufgabe eingeben.'; errEl.style.display = 'block'; return; }
       btn.disabled = true;
       btn.textContent = 'Wird gespeichert…';
       try {
-        await addDoc(aufgabenTasksCol, { person, text, timestamp: serverTimestamp() });
+        await addDoc(aufgabenTasksCol, { person, date, text, timestamp: serverTimestamp() });
         textEl.value  = '';
         personEl.value = '';
+        dateEl.value  = '';
       } catch(e) {
         errEl.textContent = 'Fehler beim Speichern. Bitte erneut versuchen.';
         errEl.style.display = 'block';
