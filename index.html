@@ -1031,20 +1031,23 @@
 
   <!-- ── AUFGABEN ── -->
   <div id="aufgaben" class="tab-panel">
-    <p class="section-title">Aufgaben der Trauzeugen</p>
+    <p class="section-title">Aufgaben</p>
 
     <div class="card" id="aufgabe-add-card" style="margin-bottom:1.5rem; display:none;">
       <p class="section-title" style="margin-bottom:1rem;">Aufgabe hinzufügen</p>
       <div style="display:flex; flex-direction:column; gap:10px;">
         <select id="aufgabe-person-select" class="polter-input">
-          <option value="">Trauzeuge auswählen…</option>
+          <option value="">Person auswählen…</option>
           <option value="Aileen">Aileen</option>
           <option value="Juli">Juli</option>
           <option value="Robin">Robin</option>
           <option value="Sören">Sören</option>
+          <option value="Heike & Axel">Heike & Axel</option>
+          <option value="Diana & Norbert">Diana & Norbert</option>
         </select>
         <select id="aufgabe-date-select" class="polter-input">
           <option value="">Datum auswählen…</option>
+          <option value="07.08">Polterabend · 07.08.2026</option>
           <option value="13.08">Standesamt · 13.08.2026</option>
           <option value="15.08">Freie Trauung · 15.08.2026</option>
         </select>
@@ -1056,11 +1059,23 @@
       </div>
     </div>
 
-    <div class="grid-2">
+    <div class="card event-card-collapsible" style="margin-bottom:1.5rem;">
+      <button class="event-header" onclick="toggleEvent(this)">
+        <div class="event-header-left">
+          <h3 style="margin:0;">Aufgaben Trauzeugen</h3>
+        </div>
+        <span class="chevron">&#8964;</span>
+      </button>
+      <div class="event-body">
+      <div class="grid-2" style="width:100%;">
 
       <!-- Aileen -->
       <div class="card">
         <h3 style="margin-bottom:1rem;">Aileen</h3>
+        <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Polterabend · 07.08.2026</div>
+          <div class="dynamic-tasks-container" data-person="Aileen" data-date="07.08"></div>
+        </div>
         <div style="margin-bottom:1rem;">
           <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
           <div class="task-row">Foto von Personalausweis Lauri schicken</div>
@@ -1077,6 +1092,10 @@
       <!-- Juli -->
       <div class="card">
         <h3 style="margin-bottom:1rem;">Juli</h3>
+        <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Polterabend · 07.08.2026</div>
+          <div class="dynamic-tasks-container" data-person="Juli" data-date="07.08"></div>
+        </div>
         <div style="margin-bottom:1rem;">
           <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
           <div class="task-row">Foto von Personalausweis Lauri schicken</div>
@@ -1095,6 +1114,10 @@
       <div class="card">
         <h3 style="margin-bottom:1rem;">Robin</h3>
         <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Polterabend · 07.08.2026</div>
+          <div class="dynamic-tasks-container" data-person="Robin" data-date="07.08"></div>
+        </div>
+        <div style="margin-bottom:1rem;">
           <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
           <div class="task-row">Foto von Personalausweis an Henny schicken</div>
           <div class="task-row">Personalausweis mitbringen</div>
@@ -1112,6 +1135,10 @@
       <div class="card">
         <h3 style="margin-bottom:1rem;">Sören</h3>
         <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Polterabend · 07.08.2026</div>
+          <div class="dynamic-tasks-container" data-person="Sören" data-date="07.08"></div>
+        </div>
+        <div style="margin-bottom:1rem;">
           <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
           <div class="task-row">Foto von Personalausweis an Henny schicken</div>
           <div class="task-row">Personalausweis mitbringen</div>
@@ -1125,6 +1152,72 @@
         </div>
       </div>
 
+      </div>
+      </div>
+    </div>
+
+    <div class="card event-card-collapsible" style="margin-bottom:1.5rem;">
+      <button class="event-header" onclick="toggleEvent(this)">
+        <div class="event-header-left">
+          <h3 style="margin:0;">Aufgaben Eltern</h3>
+        </div>
+        <span class="chevron">&#8964;</span>
+      </button>
+      <div class="event-body">
+      <div class="grid-2" style="width:100%;">
+
+      <!-- Heike & Axel -->
+      <div class="card">
+        <h3 style="margin-bottom:1rem;">Heike & Axel</h3>
+        <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Polterabend · 07.08.2026</div>
+          <div class="task-row">Polterecke aufbauen</div>
+          <div class="task-row">Unterstützung Aufbau</div>
+          <div class="dynamic-tasks-container" data-person="Heike & Axel" data-date="07.08"></div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
+          <div class="task-row">Aufbau zuhause</div>
+          <div class="task-row">Getränke einkaufen</div>
+          <div class="task-row">Deko</div>
+          <div class="task-row">2 Töpfe für Fleisch- und vegane Würstchen</div>
+          <div class="task-row">Sektempfang organisieren</div>
+          <div class="dynamic-tasks-container" data-person="Heike & Axel" data-date="13.08"></div>
+        </div>
+        <div>
+          <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
+          <div class="task-row">Willkommensschild mitbringen</div>
+          <div class="dynamic-tasks-container" data-person="Heike & Axel" data-date="15.08"></div>
+        </div>
+      </div>
+
+      <!-- Diana & Norbert -->
+      <div class="card">
+        <h3 style="margin-bottom:1rem;">Diana & Norbert</h3>
+        <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Polterabend · 07.08.2026</div>
+          <div class="task-row">Polterecke aufbauen</div>
+          <div class="task-row">Unterstützung Aufbau</div>
+          <div class="dynamic-tasks-container" data-person="Diana & Norbert" data-date="07.08"></div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <div class="section-title" style="margin-bottom:0.5rem;">Standesamt · 13.08.2026</div>
+          <div class="task-row">Unterstützung beim Aufbau</div>
+          <div class="dynamic-tasks-container" data-person="Diana & Norbert" data-date="13.08"></div>
+        </div>
+        <div>
+          <div class="section-title" style="margin-bottom:0.5rem;">Freie Trauung · 15.08.2026</div>
+          <div class="task-row">Norbert holt Lauri ab, 14:30</div>
+          <div class="task-row">Abfahrt 14:50</div>
+          <div class="task-row">Diana: mentale Unterstützung beim „Getting Ready"</div>
+          <div class="task-row">Lauri und Henrik aus Gips erstellen</div>
+          <div class="task-row">Seifenblasenflüssigkeit</div>
+          <div class="dynamic-tasks-container" data-person="Diana & Norbert" data-date="15.08"></div>
+        </div>
+      </div>
+
+      </div>
+      </div>
     </div>
 
     <div class="admin-bar">
@@ -1653,7 +1746,7 @@
     let dynamicTasksData = [];
     const personCards = {};
 
-    document.querySelectorAll('#aufgaben .card:not(#aufgabe-add-card)').forEach(card => {
+    document.querySelectorAll('#aufgaben .grid-2 > .card').forEach(card => {
       const h3 = card.querySelector('h3');
       if (!h3) return;
       const person = h3.textContent.trim();
