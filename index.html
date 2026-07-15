@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lauri & Henny</title>
+<script>
+  function setVhVar() {
+    document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+  }
+  setVhVar();
+  window.addEventListener('resize', setVhVar);
+  window.addEventListener('orientationchange', setVhVar);
+</script>
 <style>
   html { -webkit-text-size-adjust: 100%; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,6 +44,7 @@
     background: var(--bg);
     color: var(--text-primary);
     min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
     font-size: 15px;
     line-height: 1.6;
   }
@@ -47,6 +56,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     z-index: 0;
   }
   .hero-img {
@@ -91,11 +101,13 @@
     position: relative;
     z-index: 10;
     margin-top: 100vh;
+    margin-top: calc(var(--vh, 1vh) * 100);
     background: rgba(250, 250, 248, 0.72);
     -webkit-backdrop-filter: blur(20px) saturate(1.4);
     backdrop-filter: blur(20px) saturate(1.4);
     border-radius: 20px 20px 0 0;
     min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
   }
 
   /* BURGER WRAPPER — sticky im page-wrap */
